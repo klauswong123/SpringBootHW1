@@ -38,15 +38,14 @@ public class EmployeeRepository {
     }
 
     public Employee update(Integer id, Employee employee) {
-        Employee unModifiedEmployee = employees.stream()
+        Employee targetEmployee = employees.stream()
                 .filter(singleEmployee -> singleEmployee.getId().equals(id))
                 .findFirst().orElseThrow(NullPointerException::new);
-        System.out.println(employee.getName());
-        unModifiedEmployee.setAge(employee.getAge());
-        unModifiedEmployee.setGender(employee.getGender());
-        unModifiedEmployee.setName(employee.getName());
-        unModifiedEmployee.setSalary(employee.getSalary());
-        return unModifiedEmployee;
+        targetEmployee.setAge(employee.getAge());
+        targetEmployee.setGender(employee.getGender());
+        targetEmployee.setName(employee.getName());
+        targetEmployee.setSalary(employee.getSalary());
+        return targetEmployee;
     }
 
     public void delete(Integer id) {
