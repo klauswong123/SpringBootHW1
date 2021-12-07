@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,11 +38,13 @@ public class EmployeeController {
         return employeeRepository.create(employee);
     }
 
+    @ResponseStatus(HttpStatus.CREATED)
     @PutMapping("/{id}")
     public Employee updateEmployee(@PathVariable ("id") Integer id, @RequestBody Employee employee){
         return employeeRepository.update(id,employee);
     }
 
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
     public void updateEmployee(@PathVariable ("id") Integer id){
         employeeRepository.delete(id);

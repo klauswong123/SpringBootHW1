@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,6 +33,7 @@ public class CompanyController {
         return companyRepository.getByPage(page,pageSize);
     }
 
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public Company createCompany(@RequestBody Company company){
         return companyRepository.create(company);
@@ -42,6 +44,7 @@ public class CompanyController {
         return companyRepository.update(id,company);
     }
 
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
     public void updateEmployee(@PathVariable ("id") Integer id){
         companyRepository.delete(id);
