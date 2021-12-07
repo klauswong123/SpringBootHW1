@@ -4,7 +4,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public class EmployeeRepository {
@@ -17,21 +16,22 @@ public class EmployeeRepository {
         return this.employees;
     }
 
-    public Employee getEmployeeByID(Integer id){
+    public Employee getByID(Integer id){
         return employees.stream()
                 .filter(employee -> employee.getId().equals(id))
                 .findFirst().orElse(null);
     }
 
-    public Employee getEmployeeByGender(String gender){
+    public Employee getByGender(String gender){
         return employees.stream()
                 .filter(employee -> employee.getGender().equals(gender))
                 .findFirst().orElse(null);
     }
 
-    public boolean create(Employee employee){
+    public Employee create(Employee employee){
         Integer id = employees.stream().mapToInt(Employee::getId).max().orElse(0)+1;
         employee.setId(id);
-        return employees.add(employee);
+        employees.add(employee);
+        return employee;
     }
 }

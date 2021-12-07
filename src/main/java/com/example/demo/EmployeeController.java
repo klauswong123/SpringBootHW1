@@ -19,12 +19,17 @@ public class EmployeeController {
 
     @GetMapping("/{id}")
     public Employee getEmployeeByID(@PathVariable("id") Integer id){
-        return employeeRepository.getEmployeeByID(id);
+        return employeeRepository.getByID(id);
     }
 
     @GetMapping(params = {"gender"})
-    public Employee getEmployeeByID(@RequestParam String gender){
-        return employeeRepository.getEmployeeByGender(gender);
+    public Employee getEmployeeByGender(@RequestParam String gender){
+        return employeeRepository.getByGender(gender);
+    }
+
+    @PostMapping
+    public Employee createEmployee(@RequestBody Employee employee){
+        return employeeRepository.create(employee);
     }
 
 }
