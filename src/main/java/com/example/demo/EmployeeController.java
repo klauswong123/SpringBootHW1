@@ -2,6 +2,7 @@ package com.example.demo;
 
 import org.springframework.web.bind.annotation.*;
 
+import javax.websocket.server.PathParam;
 import java.util.List;
 
 @RestController
@@ -30,6 +31,11 @@ public class EmployeeController {
     @PostMapping
     public Employee createEmployee(@RequestBody Employee employee){
         return employeeRepository.create(employee);
+    }
+
+    @PutMapping("/{id}")
+    public Employee updateEmployee(@PathVariable ("id") Integer id, @RequestBody Employee employee){
+        return employeeRepository.update(id,employee);
     }
 
 }

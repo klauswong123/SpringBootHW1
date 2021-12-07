@@ -34,4 +34,16 @@ public class EmployeeRepository {
         employees.add(employee);
         return employee;
     }
+
+    public Employee update(Integer id, Employee employee) {
+        Employee unModifiedEmployee = employees.stream()
+                .filter(singleEmployee -> singleEmployee.getId().equals(id))
+                .findFirst().orElseThrow(NullPointerException::new);
+        System.out.println(employee.getName());
+        unModifiedEmployee.setAge(employee.getAge());
+        unModifiedEmployee.setGender(employee.getGender());
+        unModifiedEmployee.setName(employee.getName());
+        unModifiedEmployee.setSalary(employee.getSalary());
+        return unModifiedEmployee;
+    }
 }
