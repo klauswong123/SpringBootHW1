@@ -28,6 +28,11 @@ public class EmployeeController {
         return employeeRepository.getByGender(gender);
     }
 
+    @GetMapping(params = {"page","pageSize"})
+    public List<Employee> getEmployeeByPage(@RequestParam Integer page, Integer pageSize){
+        return employeeRepository.getByPage(page,pageSize);
+    }
+
     @PostMapping
     public Employee createEmployee(@RequestBody Employee employee){
         return employeeRepository.create(employee);
