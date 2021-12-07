@@ -23,6 +23,12 @@ public class EmployeeRepository {
                 .findFirst().orElse(null);
     }
 
+    public Employee getEmployeeByGender(String gender){
+        return employees.stream()
+                .filter(employee -> employee.getGender().equals(gender))
+                .findFirst().orElse(null);
+    }
+
     public boolean create(Employee employee){
         Integer id = employees.stream().mapToInt(Employee::getId).max().orElse(0)+1;
         employee.setId(id);

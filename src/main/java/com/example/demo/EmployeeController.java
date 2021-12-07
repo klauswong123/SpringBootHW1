@@ -1,9 +1,6 @@
 package com.example.demo;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -23,6 +20,11 @@ public class EmployeeController {
     @GetMapping("/{id}")
     public Employee getEmployeeByID(@PathVariable("id") Integer id){
         return employeeRepository.getEmployeeByID(id);
+    }
+
+    @GetMapping(params = {"gender"})
+    public Employee getEmployeeByID(@RequestParam String gender){
+        return employeeRepository.getEmployeeByGender(gender);
     }
 
 }
