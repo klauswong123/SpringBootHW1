@@ -4,17 +4,23 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class EmployeeRepository {
     private List<Employee> employees= new ArrayList<>();
 
     EmployeeRepository(){
-        this.employees.add(new Employee("Klaus",1,23));
+        this.employees.add(new Employee("Klaus",1,23,999999,"male"));
     }
-
     public List<Employee> findAll(){
         return this.employees;
+    }
+
+    public Employee getEmployeeByID(Integer id){
+        return employees.stream()
+                .filter(employee -> employee.getId().equals(id))
+                .findFirst().orElse(null);
     }
 
     public boolean create(Employee employee){
