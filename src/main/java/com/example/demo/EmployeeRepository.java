@@ -11,6 +11,7 @@ public class EmployeeRepository {
 
     EmployeeRepository(){
         this.employees.add(new Employee("Klaus",1,23,999999,"male"));
+        this.employees.add(new Employee("Jason",2,24,12312412,"female"));
     }
     public List<Employee> findAll(){
         return this.employees;
@@ -45,5 +46,9 @@ public class EmployeeRepository {
         unModifiedEmployee.setName(employee.getName());
         unModifiedEmployee.setSalary(employee.getSalary());
         return unModifiedEmployee;
+    }
+
+    public void delete(Integer id) {
+        employees.removeIf(employee -> employee.getId().equals(id));
     }
 }

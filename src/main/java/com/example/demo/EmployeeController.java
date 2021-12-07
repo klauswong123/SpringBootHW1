@@ -38,4 +38,9 @@ public class EmployeeController {
         return employeeRepository.update(id,employee);
     }
 
+    @DeleteMapping("/{id}")
+    public void updateEmployee(@PathVariable ("id") Integer id){
+        employeeRepository.delete(id);
+    }
+
 }
