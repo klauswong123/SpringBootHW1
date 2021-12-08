@@ -66,7 +66,8 @@ public class EmployeeRepository {
     }
 
     public List<Employee> getEmployeesByCompanyID(Integer companyID){
-        return findAll().stream().filter(employee -> employee.getCompanyID().equals(companyID)).collect(Collectors.toList());
+        return findAll().stream()
+                .filter(employee -> employee.getCompanyID().equals(companyID)).collect(Collectors.toList());
     }
 
     public void clearAll() {

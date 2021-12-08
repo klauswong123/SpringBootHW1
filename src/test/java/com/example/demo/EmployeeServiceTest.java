@@ -33,6 +33,7 @@ public class EmployeeServiceTest {
         given(employeeRepository.findAll()).willReturn(employees);
         //when
         List<Employee> actual = employeeService.findAll();
+        System.out.println(actual.size());
         //return
         assertEquals(employees,actual);
     }

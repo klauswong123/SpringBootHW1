@@ -10,67 +10,68 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
+import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
-public class CompanyServiceTest{
+public class CompanyServiceTest {
     @Mock
-    CompanyRepository mockCompanyRepository;
-    @InjectMocks
-    CompanyService companyService;
+    CompanyRepository companyRepository;
+
     @Mock
     EmployeeRepository employeeRepository;
+
+    @InjectMocks
+    CompanyService companyService;
+
     @InjectMocks
     EmployeeService employeeService;
 
-    private List<Employee> getEmployees() {
-        List<Employee> employees = new ArrayList<>();
-        employees.add(new Employee("Klaus",1,20,99999999,"female",1));
-        employees.add(new Employee("Klaus",2,20,99999999,"female",1));
-        employees.add(new Employee("Klaus",3,20,99999999,"female",1));
-        employees.add(new Employee("Klaus",4,20,99999999,"female",2));
-        employees.add(new Employee("Klaus",5,20,99999999,"female",2));
-        employees.add(new Employee("Klaus",6,20,99999999,"female",2));
-        employees.add(new Employee("Klaus",7,20,99999999,"female",2));
-        return employees;
-    }
-
     @Test
-    void should_return_all_employees_when_get_all_given_employees() {
+    void should_return_all_companies_when_find_all_given_companies() {
         //given
         List<Company> companies = new ArrayList<>();
-        given(mockCompanyRepository.findAll())
+        companies.add(new Company(1,"Spring"));
+        given(companyRepository.findAll())
                 .willReturn(companies);
-
-        companies.add(new Company(1, "Spring"));
-        companies.add(new Company(2, "Spring2"));
 
         //when
         List<Company> actual = companyService.findAll();
+
         //then
         assertEquals(companies, actual);
     }
-
     @Test
-    void should_return_employees_when_get_all_given_employees() {
+    void should_return_a_company_when_get_company_given_company_id() {
         //given
         List<Company> companies = new ArrayList<>();
-        List<Employee> employees = getEmployees();
-        companies.add(new Company(1, "Spring"));
-        companies.add(new Company(2, "Spring2"));
-        Employee employee = new Employee("Klaus",1,20,99999999,"female",1);
-        given(employeeService.getEmployeesByCompanyID(1)).willReturn(employees);
-        System.out.println(employeeService.getByID(1).getName());
+
+        Company company1 = new Company(1,"Spring");
+        Company company2 = new Company(2,"Spring2");
+        companies.add(company1);
+        companies.add(company2);
+        given(companyRepository.getByID(any()))
+                .willReturn(company1);
         //when
-        List<Employee> actual = companyService.getEmployeesByCompanyID(1);
-        //return
-        System.out.println(companyService.getEmployeesByCompanyID(1).size());
-        assertEquals(employees,actual);
+        Company actual = companyService.getByID(company1.getId());
+        //then
+        assertEquals(company1, actual);
     }
+
+
+
 }

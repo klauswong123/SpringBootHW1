@@ -36,24 +36,24 @@ public class CompanyController {
 
     @GetMapping(params = {"page","pageSize"})
     public List<Company> getCompanyByPage(@RequestParam Integer page, Integer pageSize){
-        return companyRepository.getByPage(page,pageSize);
+        return companyService.getByPage(page,pageSize);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public Company createCompany(@RequestBody Company company){
-        return companyRepository.create(company);
+        return companyService.create(company);
     }
 
     @PutMapping("/{id}")
     public Company updateCompany(@PathVariable ("id") Integer id, @RequestBody Company company){
-        return companyRepository.update(id,company);
+        return companyService.edit(id,company);
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
     public void deleteCompany(@PathVariable ("id") Integer id){
-        companyRepository.delete(id);
+        companyService.delete(id);
     }
 
 }
