@@ -65,4 +65,7 @@ public class CompanyRepository {
                 .collect(Collectors.toList());
     }
 
+    public void clearAll() {
+        companies.clear();
+    }
 }
