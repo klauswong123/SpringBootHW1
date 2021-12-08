@@ -24,10 +24,10 @@ public class EmployeeRepository {
                 .findFirst().orElse(null);
     }
 
-    public Employee getByGender(String gender){
+    public List<Employee> getByGender(String gender){
         return employees.stream()
                 .filter(employee -> employee.getGender().equals(gender))
-                .findFirst().orElse(null);
+                .collect(Collectors.toList());
     }
 
     public Employee create(Employee employee){
