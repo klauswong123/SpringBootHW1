@@ -21,7 +21,7 @@ public class CompanyController {
 
     @GetMapping
     public List<Company> getCompaies(){
-        return companyRepository.findAll();
+        return companyService.findAll();
     }
 
     @GetMapping("/{id}")

@@ -1,17 +1,21 @@
 package com.example.demo.Entity;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import java.util.ArrayList;
 import java.util.List;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Company {
     private Integer id;
     private String name;
     private List<Employee> employees = new ArrayList<>();
 
+    @SafeVarargs
     public Company(Integer id, String name, List<Employee>... employees) {
         this.id = id;
         this.name = name;
-        if(employees.length>0){
+        if(employees.length!=0){
             this.employees = employees[0];
         }
     }
@@ -40,8 +44,5 @@ public class Company {
         this.employees = employees;
     }
 
-    public void clearEmployees(){
-        employees.clear();
-    }
 
 }

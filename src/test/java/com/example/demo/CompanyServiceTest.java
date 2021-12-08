@@ -24,6 +24,10 @@ public class CompanyServiceTest{
     CompanyRepository mockCompanyRepository;
     @InjectMocks
     CompanyService companyService;
+    @Mock
+    EmployeeRepository employeeRepository;
+    @InjectMocks
+    EmployeeService employeeService;
 
     private List<Employee> getEmployees() {
         List<Employee> employees = new ArrayList<>();
@@ -60,8 +64,9 @@ public class CompanyServiceTest{
         List<Employee> employees = getEmployees();
         companies.add(new Company(1, "Spring"));
         companies.add(new Company(2, "Spring2"));
-        given(mockCompanyRepository.getEmployeesByCompanyID(1)).willReturn(employees);
-        System.out.println(companyService.getByID(1).getEmployees());
+        Employee employee = new Employee("Klaus",1,20,99999999,"female",1);
+        given(employeeService.getEmployeesByCompanyID(1)).willReturn(employees);
+        System.out.println(employeeService.getByID(1).getName());
         //when
         List<Employee> actual = companyService.getEmployeesByCompanyID(1);
         //return
