@@ -57,8 +57,10 @@ public class CompanyRepository {
         return targetCompany;
     }
 
-    public void delete(Integer id) {
+    public Company delete(Integer id) {
+        Company deletedCompany = getByID(id);
         companies.removeIf(company -> company.getId().equals(id));
+        return deletedCompany;
     }
 
     public List<Company> getByPage(Integer page, Integer pageSize) {

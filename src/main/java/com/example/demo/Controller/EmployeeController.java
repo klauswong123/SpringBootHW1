@@ -1,7 +1,6 @@
 package com.example.demo.Controller;
 
-import com.example.demo.EmployeeService;
-import com.example.demo.Repository.EmployeeRepository;
+import com.example.demo.Service.EmployeeService;
 import com.example.demo.Entity.Employee;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

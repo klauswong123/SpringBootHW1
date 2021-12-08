@@ -7,12 +7,22 @@ public class Employee {
     private Integer age;
     private Integer salary;
     private String gender;
-    public Employee(String name, Integer id, Integer age, Integer salary, String gender) {
+
+    private Integer companyID;
+    public Employee(String name, Integer id, Integer age, Integer salary, String gender, Integer... companyID) {
         this.name = name;
         this.id = id;
         this.age = age;
         this.salary = salary;
         this.gender = gender;
+    }
+
+    public Integer getCompanyID() {
+        return companyID;
+    }
+
+    public void setCompanyID(Integer companyID) {
+        this.companyID = companyID;
     }
 
     public String getName() {
