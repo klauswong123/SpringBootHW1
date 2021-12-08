@@ -59,4 +59,8 @@ public class EmployeeRepository {
                 .limit(pageSize)
                 .collect(Collectors.toList());
     }
+
+    public void clearAll() {
+        employees.clear();
+    }
 }

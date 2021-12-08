@@ -33,12 +33,13 @@ public class EmployeeController {
         return employeeRepository.getByPage(page,pageSize);
     }
 
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public Employee createEmployee(@RequestBody Employee employee){
         return employeeRepository.create(employee);
     }
 
-    @ResponseStatus(HttpStatus.CREATED)
+
     @PutMapping("/{id}")
     public Employee updateEmployee(@PathVariable ("id") Integer id, @RequestBody Employee employee){
         return employeeRepository.update(id,employee);

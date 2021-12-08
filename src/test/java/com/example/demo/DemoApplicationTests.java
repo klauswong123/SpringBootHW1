@@ -1,13 +1,60 @@
 package com.example.demo;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
+import static org.hamcrest.Matchers.hasSize;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 @SpringBootTest
+@AutoConfigureMockMvc
 class DemoApplicationTests {
+	@Autowired
+	MockMvc mockMvc;
+	@Autowired
+	EmployeeRepository employeeRepository;
+
+	@BeforeEach
+	void cleanRepository(){
+		employeeRepository.clearAll();
+	}
 
 	@Test
-	void contextLoads() {
+	void should_get_all_employees_when_perform_given_employees() throws Exception {
+		//given
+		Employee employee = new Employee("Klaus",1,20,99999999,"female");
+		employeeRepository.create(employee);
+		//when
+		mockMvc.perform(MockMvcRequestBuilders.get("/employees"))
+				.andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(1)))
+				.andExpect(MockMvcResultMatchers.jsonPath("$[0].id").isNumber())
+				.andExpect(MockMvcResultMatchers.jsonPath("$[0].age").value(20))
+				.andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("Klaus"));
+		//then
+	}
+
+	@Test
+	void should_return_employee_when_perform_post_given_employee() throws Exception {
+		String employee="{\n" +
+				"    \"name\": \"Klaus\",\n" +
+				"    \"id\": 1,\n" +
+				"    \"age\": 23,\n" +
+				"    \"salary\": 123456,\n" +
+				"    \"gender\": \"male\"\n" +
+				"}";
+
+		mockMvc.perform(post("/employees")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(employee))
+				.andExpect(MockMvcResultMatchers.status().isCreated());
 	}
 
 }
