@@ -35,7 +35,7 @@ public class EmployeeServiceTest {
     }
 
     @Test
-    void should__when__given() {
+    void should_update_employee_when_update_given_employees() {
         //given
         Employee employee = new Employee("Klaus",1,20,99999999,"female");
         Employee updateEmployee = new Employee("Klaus",1,23,99999999,"female");
@@ -47,4 +47,19 @@ public class EmployeeServiceTest {
         //return
         assertEquals(employee,actual);
     }
+
+    @Test
+    void should_employee_when_get_given_id() {
+        //given
+        Employee employee = new Employee("Klaus",1,20,99999999,"female");
+        given(employeeRepository.getByID(employee.getId()))
+                .willReturn(employee);
+        //when
+        Employee actual = employeeService.getByID(employee.getId());
+        verify(employeeRepository).getByID(employee.getId());
+        //return
+        assertEquals(employee,actual);
+    }
+
+
 }

@@ -17,4 +17,8 @@ public class EmployeeService {
     public Employee edit(Integer id, Employee updateEmployee) {
         return employeeRepository.update(id,updateEmployee);
     }
+
+    public Employee getByID(Integer id) {
+        return employeeRepository.getByID(id);
+    }
 }
