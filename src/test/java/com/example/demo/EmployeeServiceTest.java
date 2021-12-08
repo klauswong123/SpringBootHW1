@@ -93,7 +93,21 @@ public class EmployeeServiceTest {
         assertEquals(employee1,actual);
     }
 
-
+    @Test
+    void should_get_employees_when_get_given_page_and_pageSize() {
+        //given
+        List<Employee> employees = new ArrayList<>();
+        Integer page = 1;
+        Integer pageSize = 2;
+        Employee employee = new Employee("Klaus",1,20,99999999,"female");
+        given(employeeRepository.getByPage(page,pageSize))
+                .willReturn(employees);
+        //when
+        List<Employee> actual = employeeService.getByPage(page,pageSize);
+        verify(employeeRepository).getByPage(page,pageSize);
+        //return
+        assertEquals(employees,actual);
+    }
 
 
 }
