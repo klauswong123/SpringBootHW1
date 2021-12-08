@@ -25,6 +25,7 @@ public class CompanyRepository {
         this.employeeRepository = employeeRepository;
     }
     public List<Company> findAll(){
+        companies.forEach(company -> company.setEmployees(null));
         return companies;
     }
 
