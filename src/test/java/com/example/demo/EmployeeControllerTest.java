@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -48,7 +50,6 @@ class EmployeeControllerTest {
 	void should_return_employee_when_perform_post_given_employee() throws Exception {
 		String employee="{\n" +
 				"    \"name\": \"Klaus\",\n" +
-				"    \"id\": 1,\n" +
 				"    \"age\": 23,\n" +
 				"    \"salary\": 123456,\n" +
 				"    \"gender\": \"male\"\n" +
@@ -57,7 +58,11 @@ class EmployeeControllerTest {
 		mockMvc.perform(post("/employees")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(employee))
-				.andExpect(MockMvcResultMatchers.status().isCreated());
+				.andExpect(MockMvcResultMatchers.status().isCreated())
+				.andExpect(MockMvcResultMatchers.jsonPath("$.age").value(23))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.name").value("Klaus"))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.gender").value("male"))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.salary").value(123456));
 	}
 
 	@Test
@@ -65,15 +70,14 @@ class EmployeeControllerTest {
 		//given
 		Employee employee = new Employee("Klaus",1,20,99999999,"female");
 		employeeRepository.create(employee);
+		String employeeAsJson = new ObjectMapper().writeValueAsString(employee);
 		//when
-		mockMvc.perform(MockMvcRequestBuilders.get("/employees/1"))
+		String returnBody = mockMvc.perform(MockMvcRequestBuilders.get("/employees/1"))
 				.andExpect(MockMvcResultMatchers.status().isOk())
 				.andExpect(MockMvcResultMatchers.jsonPath("$.id").isNumber())
-				.andExpect(MockMvcResultMatchers.jsonPath("$.age").value(20))
-				.andExpect(MockMvcResultMatchers.jsonPath("$.name").value("Klaus"))
-				.andExpect(MockMvcResultMatchers.jsonPath("$.gender").value("female"))
-				.andExpect(MockMvcResultMatchers.jsonPath("$.salary").value(99999999));
+				.andReturn().getResponse().getContentAsString();
 		//then
+		assertEquals(returnBody,employeeAsJson);
 	}
 
 	@Test
@@ -112,11 +116,12 @@ class EmployeeControllerTest {
 		Employee employee3 = new Employee("Jack",3,60,1,"male");
 		employeeRepository.create(employee3);
 		//when
+		ObjectMapper mapper = new ObjectMapper();
 		mockMvc.perform(MockMvcRequestBuilders.get("/employees?gender=male"))
 				.andExpect(MockMvcResultMatchers.status().isOk())
 				.andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(2)))
 				.andExpect(MockMvcResultMatchers.jsonPath("$[0].id").isNumber())
-				.andExpect(MockMvcResultMatchers.jsonPath("$[0].age").value(50))
+				.andExpect(MockMvcResultMatchers.jsonPath("$[*].name", containsInAnyOrder("Nick", "Jack")))
 				.andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("Nick"))
 				.andExpect(MockMvcResultMatchers.jsonPath("$[0].gender").value("male"))
 				.andExpect(MockMvcResultMatchers.jsonPath("$[0].salary").value(1000))

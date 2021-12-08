@@ -77,4 +77,21 @@ public class CompanyControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.employees[1].gender").value("female"));
         //then
     }
+
+//    @Test
+//    void should_return_employees_when_get_given_page_and_pageSize() throws Exception {
+//        //given
+//        Employee employee1 = new Employee("Klaus",1,23,999999,"male");
+//        Employee employee2 = new Employee("Jason",2,24,12312412,"female");
+//        companyRepository.create(new Company(1,"Apple", List.of(employee1,employee2)));
+//        Employee employee3 = new Employee("Kam",3,23,999999,"male");
+//        Employee employee4 = new Employee("Louis",4,24,12312412,"female");
+//        companyRepository.create(new Company(2,"MineCraft",List.of(employee3,employee4)));
+//
+//        //when
+//        mockMvc.perform(MockMvcRequestBuilders.get("/companies?page=1&pageSize=")){
+//
+//        }
+//        //return
+//    }
 }
