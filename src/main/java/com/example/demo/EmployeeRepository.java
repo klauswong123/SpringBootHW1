@@ -44,6 +44,8 @@ public class EmployeeRepository {
                 .findFirst().orElseThrow(NullPointerException::new);
         if (employee.getAge()!=null) targetEmployee.setAge(employee.getAge());
         if (employee.getSalary()!=null) targetEmployee.setSalary(employee.getSalary());
+        employees.remove(employee);
+        employees.add(targetEmployee);
         return targetEmployee;
     }
 
@@ -53,7 +55,7 @@ public class EmployeeRepository {
 
     public List<Employee> getByPage(Integer page, Integer pageSize) {
         return employees.stream()
-                .skip((long) page *pageSize)
+                .skip((long) (page-1) *pageSize)
                 .limit(pageSize)
                 .collect(Collectors.toList());
     }

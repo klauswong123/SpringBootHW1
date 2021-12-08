@@ -47,8 +47,10 @@ public class CompanyRepository {
         Company targetCompany = companies.stream()
                 .filter(singleEmployee -> singleEmployee.getId().equals(id))
                 .findFirst().orElseThrow(NullPointerException::new);
-        if(company.getName().isBlank()) targetCompany.setEmployees(company.getEmployees());
-        if(company.getName().isEmpty()) targetCompany.setName(company.getName());
+        if(company.getEmployees()!=null) targetCompany.setEmployees(company.getEmployees());
+        if(company.getName()!=null) targetCompany.setName(company.getName());
+        companies.remove(company);
+        companies.add(company);
         return targetCompany;
     }
 
@@ -58,7 +60,7 @@ public class CompanyRepository {
 
     public List<Company> getByPage(Integer page, Integer pageSize) {
         return companies.stream()
-                .skip((long) page *pageSize)
+                .skip((long) (page-1) *pageSize)
                 .limit(pageSize)
                 .collect(Collectors.toList());
     }
