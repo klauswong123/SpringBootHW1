@@ -1,5 +1,7 @@
-package com.example.demo;
+package com.example.demo.Repository;
 
+import com.example.demo.Entity.Employee;
+import com.example.demo.Exception.NoEmployeeFoundException;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -21,7 +23,7 @@ public class EmployeeRepository {
     public Employee getByID(Integer id){
         return employees.stream()
                 .filter(employee -> employee.getId().equals(id))
-                .findFirst().orElse(null);
+                .findFirst().orElseThrow(NoEmployeeFoundException::new);
     }
 
     public List<Employee> getByGender(String gender){

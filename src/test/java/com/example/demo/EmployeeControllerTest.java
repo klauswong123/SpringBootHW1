@@ -1,5 +1,7 @@
 package com.example.demo;
 
+import com.example.demo.Entity.Employee;
+import com.example.demo.Repository.EmployeeRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

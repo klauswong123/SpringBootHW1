@@ -1,5 +1,8 @@
-package com.example.demo;
+package com.example.demo.Repository;
 
+import com.example.demo.Entity.Company;
+import com.example.demo.Entity.Employee;
+import com.example.demo.Exception.NoCompanyFoundException;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -27,7 +30,7 @@ public class CompanyRepository {
     public Company getByID(Integer id){
         return companies.stream()
                 .filter(company -> company.getId().equals(id))
-                .findFirst().orElse(null);
+                .findFirst().orElseThrow(NoCompanyFoundException::new);
     }
 
     public List<Employee> getEmployees(Integer id){
