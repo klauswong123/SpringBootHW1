@@ -48,8 +48,12 @@ public class EmployeeRepository {
         return targetEmployee;
     }
 
-    public void delete(Integer id) {
+    public Employee delete(Integer id) {
+        Employee deletedEmployee = employees.stream()
+                .filter(employee -> employee.getId().equals(id))
+                .findFirst().orElse(null);
         employees.removeIf(employee -> employee.getId().equals(id));
+        return deletedEmployee;
     }
 
     public List<Employee> getByPage(Integer page, Integer pageSize) {

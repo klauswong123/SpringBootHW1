@@ -52,7 +52,7 @@ public class EmployeeServiceTest {
     void should_employee_when_get_given_id() {
         //given
         Employee employee = new Employee("Klaus",1,20,99999999,"female");
-        given(employeeRepository.getByID(employee.getId()))
+        given(employeeRepository.getByID(any()))
                 .willReturn(employee);
         //when
         Employee actual = employeeService.getByID(employee.getId());
@@ -84,7 +84,7 @@ public class EmployeeServiceTest {
     void should_create_employee_when_create_given_employee() {
         //given
         Employee employee1 = new Employee("Klaus",1,20,99999999,"female");
-        given(employeeRepository.create(employee1))
+        given(employeeRepository.create(any()))
                 .willReturn(employee1);
         //when
         Employee actual = employeeService.create(employee1);
@@ -109,5 +109,16 @@ public class EmployeeServiceTest {
         assertEquals(employees,actual);
     }
 
-
+    @Test
+    void should_delete_employee_when_delete_given_id() {
+        //given
+        Employee employee = new Employee("Klaus",1,20,99999999,"female");
+        given(employeeRepository.delete(any()))
+                .willReturn(employee);
+        //when
+        Employee actual = employeeService.delete(employee.getId());
+        verify(employeeRepository).delete(employee.getId());
+        //return
+        assertEquals(employee,actual);
+    }
 }
