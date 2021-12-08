@@ -22,12 +22,6 @@ public class CompanyService {
     }
 
     public List<Company> findAll() {
-//        List<Integer> ids = companyRepository.findAll().stream().map(Company::getId).collect(Collectors.toList());
-//        List<Company> companies = ids.stream().map(id->companyRepository.getByID(id)).collect(Collectors.toList());
-//        if (companies.size()>0){
-//            companies.forEach(company -> company.setEmployees(employeeRepository.getEmployeesByCompanyID(company.getId())));
-//            companies.forEach(company -> companyRepository.update(company.getId(),company));
-//        }
         return companyRepository.findAll();
     }
 

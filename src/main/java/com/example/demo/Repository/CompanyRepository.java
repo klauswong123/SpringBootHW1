@@ -15,15 +15,17 @@ import java.util.stream.Collectors;
 @Repository
 public class CompanyRepository {
 
-
+    @Autowired
+    EmployeeRepository employeeRepository;
     private List<Company> companies = new ArrayList<>();
 
-    CompanyRepository(){
+    CompanyRepository(EmployeeRepository employeeRepository){
         this.companies.add(new Company(1,"Apple"));
         this.companies.add(new Company(2,"MineCraft"));
+        this.employeeRepository = employeeRepository;
     }
     public List<Company> findAll(){
-        return this.companies;
+        return companies;
     }
 
     public Company getByID(Integer id){
