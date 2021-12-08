@@ -37,14 +37,13 @@ public class EmployeeRepository {
         return employee;
     }
 
+    //TODO check company if null
     public Employee update(Integer id, Employee employee) {
         Employee targetEmployee = employees.stream()
                 .filter(singleEmployee -> singleEmployee.getId().equals(id))
                 .findFirst().orElseThrow(NullPointerException::new);
-        targetEmployee.setAge(employee.getAge());
-        targetEmployee.setGender(employee.getGender());
-        targetEmployee.setName(employee.getName());
-        targetEmployee.setSalary(employee.getSalary());
+        if (employee.getAge()!=null) targetEmployee.setAge(employee.getAge());
+        if (employee.getSalary()!=null) targetEmployee.setSalary(employee.getSalary());
         return targetEmployee;
     }
 

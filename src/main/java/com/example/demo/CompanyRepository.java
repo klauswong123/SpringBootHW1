@@ -47,8 +47,8 @@ public class CompanyRepository {
         Company targetCompany = companies.stream()
                 .filter(singleEmployee -> singleEmployee.getId().equals(id))
                 .findFirst().orElseThrow(NullPointerException::new);
-        targetCompany.setEmployees(company.getEmployees());
-        targetCompany.setName(company.getName());
+        if(company.getName().isBlank()) targetCompany.setEmployees(company.getEmployees());
+        if(company.getName().isEmpty()) targetCompany.setName(company.getName());
         return targetCompany;
     }
 
