@@ -127,4 +127,26 @@ class DemoApplicationTests {
 		//then
 	}
 
+	@Test
+	void should_return_employee_when_perform_put_given_updated_employee() throws Exception {
+		//given
+		Employee employee = new Employee("Klaus",1,20,99999999,"female");
+		employeeRepository.create(employee);
+		String updatedEmployee="{\n" +
+				"    \"age\": 23,\n" +
+				"    \"salary\": 123456\n" +
+				"}";
+		//when
+		//then
+		mockMvc.perform(MockMvcRequestBuilders.put("/employees/1")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(updatedEmployee))
+				.andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.jsonPath("$.id").isNumber())
+				.andExpect(MockMvcResultMatchers.jsonPath("$.age").value(23))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.name").value("Klaus"))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.gender").value("female"))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.salary").value(123456));
+	}
+
 }
