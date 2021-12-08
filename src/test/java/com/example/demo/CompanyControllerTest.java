@@ -53,4 +53,28 @@ public class CompanyControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].employees[1].gender").value("female"));
         //then
     }
+
+    @Test
+    void should_get_company_when_perform_get_given_id() throws Exception {
+        //given
+        Employee employee1 = new Employee("Klaus",1,23,999999,"male");
+        Employee employee2 = new Employee("Jason",2,24,12312412,"female");
+        companyRepository.create(new Company(1,"Apple", List.of(employee1,employee2)));
+        //when
+        mockMvc.perform(MockMvcRequestBuilders.get("/companies/1"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").isNumber())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("Apple"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.employees[0].id").value("1"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.employees[0].name").value("Klaus"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.employees[0].age").value(23))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.employees[0].salary").value(999999))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.employees[0].gender").value("male"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.employees[1].id").value("2"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.employees[1].name").value("Jason"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.employees[1].age").value(24))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.employees[1].salary").value(12312412))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.employees[1].gender").value("female"));
+        //then
+    }
 }
