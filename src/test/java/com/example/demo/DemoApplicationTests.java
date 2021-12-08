@@ -60,7 +60,7 @@ class DemoApplicationTests {
 	}
 
 	@Test
-	void should_get_employee__when_perform_given_id() throws Exception {
+	void should_get_employee_when_perform_get_given_id() throws Exception {
 		//given
 		Employee employee = new Employee("Klaus",1,20,99999999,"female");
 		employeeRepository.create(employee);
@@ -73,6 +73,31 @@ class DemoApplicationTests {
 				.andExpect(MockMvcResultMatchers.jsonPath("$.gender").value("female"))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.salary").value(99999999));
 		//then
+	}
+
+	@Test
+	void should_get_employees_when_perform_get_given_page_and_pageSize() throws Exception {
+		//given
+		Employee employee1 = new Employee("Klaus",1,20,99999999,"female");
+		employeeRepository.create(employee1);
+		Employee employee2 = new Employee("Nick",2,50,1000,"male");
+		employeeRepository.create(employee2);
+		Employee employee3 = new Employee("Jack",3,60,1,"male");
+		employeeRepository.create(employee3);
+		//when
+		//then
+		mockMvc.perform(MockMvcRequestBuilders.get("/employees/?page=1&pageSize=2"))
+				.andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.jsonPath("$[0].id").isNumber())
+				.andExpect(MockMvcResultMatchers.jsonPath("$[0].age").value(20))
+				.andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("Klaus"))
+				.andExpect(MockMvcResultMatchers.jsonPath("$[0].gender").value("female"))
+				.andExpect(MockMvcResultMatchers.jsonPath("$[0].salary").value(99999999))
+				.andExpect(MockMvcResultMatchers.jsonPath("$[1].id").isNumber())
+				.andExpect(MockMvcResultMatchers.jsonPath("$[1].age").value(50))
+				.andExpect(MockMvcResultMatchers.jsonPath("$[1].name").value("Nick"))
+				.andExpect(MockMvcResultMatchers.jsonPath("$[1].gender").value("male"))
+				.andExpect(MockMvcResultMatchers.jsonPath("$[1].salary").value(1000));
 	}
 
 }
