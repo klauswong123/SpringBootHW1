@@ -21,4 +21,8 @@ public class EmployeeService {
     public Employee getByID(Integer id) {
         return employeeRepository.getByID(id);
     }
+
+    public List<Employee> getByGender(String gender) {
+        return employeeRepository.getByGender(gender);
+    }
 }
