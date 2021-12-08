@@ -1,6 +1,8 @@
 package com.example.demo.Entity;
 
 
+import java.util.Arrays;
+
 public class Employee {
     private String name;
     private Integer id;
@@ -15,10 +17,16 @@ public class Employee {
         this.age = age;
         this.salary = salary;
         this.gender = gender;
+        if(companyID.length!=0){
+            this.companyID=companyID[0];
+        }
+        else{
+            this.companyID=1;
+        }
     }
 
     public Integer getCompanyID() {
-        return companyID;
+        return this.companyID;
     }
 
     public void setCompanyID(Integer companyID) {

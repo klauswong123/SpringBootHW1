@@ -35,7 +35,7 @@ public class CompanyControllerTest {
         //given
         Employee employee1 = new Employee("Klaus",1,23,999999,"male");
         Employee employee2 = new Employee("Jason",2,24,12312412,"female");
-        companyRepository.create(new Company(1,"Apple", List.of(employee1,employee2)));
+        companyRepository.create(new Company(1,"Apple"));
         //when
         mockMvc.perform(MockMvcRequestBuilders.get("/companies"))
                 .andExpect(MockMvcResultMatchers.status().isOk())

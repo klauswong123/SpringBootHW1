@@ -8,10 +8,12 @@ public class Company {
     private String name;
     private List<Employee> employees = new ArrayList<>();
 
-    public Company(Integer id, String name, List<Employee> employees) {
+    public Company(Integer id, String name, List<Employee>... employees) {
         this.id = id;
         this.name = name;
-        this.employees = employees;
+        if(employees.length>0){
+            this.employees = employees[0];
+        }
     }
 
     public Integer getId() {
@@ -38,5 +40,8 @@ public class Company {
         this.employees = employees;
     }
 
+    public void clearEmployees(){
+        employees.clear();
+    }
 
 }

@@ -5,6 +5,7 @@ import com.example.demo.Repository.EmployeeRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class EmployeeService {
@@ -12,6 +13,7 @@ public class EmployeeService {
     public EmployeeService(EmployeeRepository employeeRepository){
         this.employeeRepository = employeeRepository;
     }
+
     public List<Employee> findAll() {
         return employeeRepository.findAll();
     }
@@ -39,4 +41,11 @@ public class EmployeeService {
     public Employee delete(Integer id) {
         return employeeRepository.delete(id);
     }
+
+    public List<Employee> getEmployeesByCompanyID(Integer companyID){
+        return employeeRepository.findAll().stream()
+                .filter(employee -> employee.getCompanyID().equals(companyID)).collect(Collectors.toList());
+    }
+
+
 }

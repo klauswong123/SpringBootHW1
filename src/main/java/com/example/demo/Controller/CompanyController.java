@@ -3,6 +3,7 @@ package com.example.demo.Controller;
 import com.example.demo.Repository.CompanyRepository;
 import com.example.demo.Entity.Company;
 import com.example.demo.Entity.Employee;
+import com.example.demo.Service.CompanyService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,8 +13,10 @@ import java.util.List;
 @RequestMapping("companies")
 public class CompanyController {
     private CompanyRepository companyRepository;
-    public CompanyController(CompanyRepository companyRepository){
+    private CompanyService companyService;
+    public CompanyController(CompanyRepository companyRepository, CompanyService companyService){
         this.companyRepository = companyRepository;
+        this.companyService = companyService;
     }
 
     @GetMapping
@@ -23,12 +26,12 @@ public class CompanyController {
 
     @GetMapping("/{id}")
     public Company getCompanyByID(@PathVariable("id") Integer id){
-        return companyRepository.getByID(id);
+        return companyService.getByID(id);
     }
 
     @GetMapping("/{id}/employees")
     public List<Employee> getEmployeesByID(@PathVariable("id") Integer id){
-        return companyRepository.getEmployees(id);
+        return companyService.getEmployeesByCompanyID(id);
     }
 
     @GetMapping(params = {"page","pageSize"})

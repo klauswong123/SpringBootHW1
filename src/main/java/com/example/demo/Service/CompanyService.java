@@ -4,14 +4,23 @@ import com.example.demo.Entity.Company;
 import com.example.demo.Entity.Employee;
 import com.example.demo.Repository.CompanyRepository;
 import com.example.demo.Repository.EmployeeRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
+@Service
 public class CompanyService {
+    @Autowired
+    private EmployeeService employeeService;
+
     private CompanyRepository companyRepository;
-    public CompanyService(CompanyRepository companyRepository){
+    public CompanyService(CompanyRepository companyRepository, EmployeeRepository employeeRepository){
         this.companyRepository = companyRepository;
     }
+
     public List<Company> findAll() {
         return companyRepository.findAll();
     }
@@ -21,13 +30,15 @@ public class CompanyService {
     }
 
     public Company getByID(Integer id) {
-        return companyRepository.getByID(id);
+        Company company = companyRepository.getByID(id);
+        company.setEmployees(employeeService.getEmployeesByCompanyID(id));
+        return company;
     }
 
-    public List<Employee> getCompaniesByCompany(String gender) {
-        return null;
-    }
+    public List<Employee> getEmployeesByCompanyID(Integer companyID){
+        return employeeService.getEmployeesByCompanyID(companyID);
 
+    }
     public Company create(Company company) {
         return companyRepository.create(company);
     }

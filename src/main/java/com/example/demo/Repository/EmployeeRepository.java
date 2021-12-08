@@ -13,8 +13,8 @@ public class EmployeeRepository {
     private List<Employee> employees= new ArrayList<>();
 
     EmployeeRepository(){
-        this.employees.add(new Employee("Klaus",1,23,999999,"male"));
-        this.employees.add(new Employee("Jason",2,24,12312412,"female"));
+        this.employees.add(new Employee("Klaus",1,23,999999,"male",1));
+        this.employees.add(new Employee("Jason",2,24,12312412,"female",1));
     }
     public List<Employee> findAll(){
         return this.employees;
@@ -63,6 +63,10 @@ public class EmployeeRepository {
                 .skip((long) (page-1) *pageSize)
                 .limit(pageSize)
                 .collect(Collectors.toList());
+    }
+
+    public List<Employee> getEmployeesByCompanyID(Integer companyID){
+        return findAll().stream().filter(employee -> employee.getCompanyID().equals(companyID)).collect(Collectors.toList());
     }
 
     public void clearAll() {
