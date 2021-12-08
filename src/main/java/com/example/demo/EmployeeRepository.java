@@ -37,7 +37,6 @@ public class EmployeeRepository {
         return employee;
     }
 
-    //TODO check company if null
     public Employee update(Integer id, Employee employee) {
         Employee targetEmployee = employees.stream()
                 .filter(singleEmployee -> singleEmployee.getId().equals(id))
