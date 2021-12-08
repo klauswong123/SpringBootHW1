@@ -11,6 +11,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import static org.hamcrest.Matchers.hasSize;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 @SpringBootTest
@@ -147,6 +148,23 @@ class DemoApplicationTests {
 				.andExpect(MockMvcResultMatchers.jsonPath("$.name").value("Klaus"))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.gender").value("female"))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.salary").value(123456));
+	}
+
+	@Test
+	void should_delete_one_employee_when_perform_delete_given_id() throws Exception {
+		//given
+		Employee employee = new Employee("Klaus",1,20,99999999,"female");
+		employeeRepository.create(employee);
+		Employee employee2 = new Employee("Nick",2,50,1000,"male");
+		employeeRepository.create(employee2);
+		Employee employee3 = new Employee("Jack",3,60,1,"male");
+		employeeRepository.create(employee3);
+		//when
+		mockMvc.perform(MockMvcRequestBuilders.delete("/employees/3"))
+				.andExpect(MockMvcResultMatchers.status().isNoContent());
+
+		//then
+		assertEquals(2,employeeRepository.findAll().size());
 	}
 
 }
