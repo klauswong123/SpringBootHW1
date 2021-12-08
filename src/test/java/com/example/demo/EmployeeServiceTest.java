@@ -80,5 +80,20 @@ public class EmployeeServiceTest {
         assertEquals(employees,actual);
     }
 
+    @Test
+    void should_create_employee_when_create_given_employee() {
+        //given
+        Employee employee1 = new Employee("Klaus",1,20,99999999,"female");
+        given(employeeRepository.create(employee1))
+                .willReturn(employee1);
+        //when
+        Employee actual = employeeService.create(employee1);
+        verify(employeeRepository).create(employee1);
+        //return
+        assertEquals(employee1,actual);
+    }
+
+
+
 
 }

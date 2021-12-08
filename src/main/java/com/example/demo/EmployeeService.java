@@ -25,4 +25,8 @@ public class EmployeeService {
     public List<Employee> getByGender(String gender) {
         return employeeRepository.getByGender(gender);
     }
+
+    public Employee create(Employee employee) {
+        return employeeRepository.create(employee);
+    }
 }
