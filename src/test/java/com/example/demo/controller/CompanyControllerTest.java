@@ -92,14 +92,11 @@ public class CompanyControllerTest {
     @Test
     void should_get_employees_when_perform_get_given_id() throws Exception {
         //given
-        Employee employee1 = new Employee("Klaus","1",23,999999,"male","1");
-        Employee employee2 = new Employee("Jason","2",24,12312412,"female","1");
-        companyRepository.insert(new Company("Apple"));
+        Company company = preCreateCompany1();
         //when
-        String employeeAsJson = new ObjectMapper().writeValueAsString(List.of(employee1,employee2));
-        String returnBody = mockMvc.perform(MockMvcRequestBuilders.get("/companies/1/employees"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/companies/{id}/employees", company.getId()))
                 .andExpect(status().isOk())
-                .andReturn().getResponse().getContentAsString();
+                .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(2)));
         //then
     }
 
