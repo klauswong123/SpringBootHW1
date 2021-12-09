@@ -132,26 +132,36 @@ public class CompanyControllerTest {
     @Test
     void should_return_changed_company_when_perform_put_given_company_id() throws Exception {
         //given
-        String company="{\"name\": \"Spring111\"}";
+        Company company = preCreateCompany1();
+        String companyName="{\"name\": \"Spring111\"}";
         //when
         //then
-        mockMvc.perform(put("/companies/1")
+        mockMvc.perform(put("/companies/{id}",company.getId())
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(company))
+                .content(companyName))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("Spring111"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value("1"));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").isString());
     }
 
     @Test
     void should_delete_company_when_perform_delete_given_company_and_id() throws Exception {
         //given
-        Company company = companyRepository.insert(new Company("Apple"));
-        employeeRepository.insert(new Employee("Klaus",23,999999,"male",company.getId()));
-        employeeRepository.insert(new Employee("Jason",24,12312412,"female",company.getId()));
+        Company company = preCreateCompany1();
         //when
         //then
         mockMvc.perform(MockMvcRequestBuilders.delete("/companies/{id}", company.getId()))
                 .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void should_return_notfound_when_perform_get_given_company_and_falseId() throws Exception {
+        //given
+        Company company = preCreateCompany1();
+        companyRepository.delete(company);
+        //when
+        //then
+        mockMvc.perform(MockMvcRequestBuilders.get("/employees/{id}",company.getId()))
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
 }
