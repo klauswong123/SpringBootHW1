@@ -77,7 +77,6 @@ public class CompanyServiceTest {
         //when
         Company actual = companyService.getByID(company1.getId());
         //then
-        System.out.println(actual.getEmployees());
         assertEquals(company1, actual);
     }
 

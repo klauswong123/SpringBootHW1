@@ -1,5 +1,6 @@
 package com.example.demo.Controller;
 
+import com.example.demo.Exception.NoCompanyFoundException;
 import com.example.demo.Repository.CompanyRepository;
 import com.example.demo.Entity.Company;
 import com.example.demo.Entity.Employee;
@@ -25,7 +26,7 @@ public class CompanyController {
     }
 
     @GetMapping("/{id}")
-    public Company getCompanyByID(@PathVariable("id") Integer id){
+    public Company getCompanyByID(@PathVariable("id") Integer id) {
         return companyService.getByID(id);
     }
 
