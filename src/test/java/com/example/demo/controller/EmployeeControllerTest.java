@@ -152,18 +152,12 @@ class EmployeeControllerTest {
 		Employee employee3 = new Employee("Jack","3",60,1,"male","1");
 		employeeRepository.insert(employee3);
 		//when
-		ObjectMapper mapper = new ObjectMapper();
 		mockMvc.perform(get("/employees?gender=male"))
 				.andExpect(MockMvcResultMatchers.status().isOk())
 				.andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(2)))
-				.andExpect(MockMvcResultMatchers.jsonPath("$[0].id").isString())
+				.andExpect(MockMvcResultMatchers.jsonPath("$[*].id", hasSize(2)))
 				.andExpect(MockMvcResultMatchers.jsonPath("$[*].name", containsInAnyOrder("Nick", "Jack")))
-				.andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("Nick"))
-				.andExpect(MockMvcResultMatchers.jsonPath("$[0].gender").value("male"))
-				.andExpect(MockMvcResultMatchers.jsonPath("$[1].id").isString())
-				.andExpect(MockMvcResultMatchers.jsonPath("$[1].age").value(60))
-				.andExpect(MockMvcResultMatchers.jsonPath("$[1].name").value("Jack"))
-				.andExpect(MockMvcResultMatchers.jsonPath("$[1].gender").value("male"));
+				.andExpect(MockMvcResultMatchers.jsonPath("$[*].age", containsInAnyOrder(50, 60)));
 		//then
 	}
 
