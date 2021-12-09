@@ -1,8 +1,8 @@
 package com.example.demo;
-import com.example.demo.Entity.Company;
-import com.example.demo.Entity.Employee;
-import com.example.demo.Repository.CompanyRepository;
-import com.example.demo.Repository.EmployeeRepository;
+import com.example.demo.entity.Company;
+import com.example.demo.entity.Employee;
+import com.example.demo.mapper.CompanyMapper;
+import com.example.demo.mapper.EmployeeMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,6 +33,10 @@ public class CompanyControllerTest {
     CompanyRepository companyRepository;
     @Autowired
     EmployeeRepository employeeRepository;
+    @Autowired
+    CompanyMapper companyMapper;
+    @Autowired
+    EmployeeMapper employeeMapper;
     @BeforeEach
     void cleanRepository(){
         companyRepository.clearAll();
@@ -40,8 +44,8 @@ public class CompanyControllerTest {
 
     private List<Employee> getEmployees(){
         List<Employee> employees = new ArrayList<>();
-        Employee employee1 = new Employee("Klaus",1,23,999999,"male",1);
-        Employee employee2 = new Employee("Jason",2,24,12312412,"female",1);
+        Employee employee1 = new Employee("Klaus","1",23,999999,"male","1");
+        Employee employee2 = new Employee("Jason","2",24,12312412,"female","1");
         employees.add(employee1);
         employees.add(employee2);
         return employees;
@@ -49,14 +53,14 @@ public class CompanyControllerTest {
     @Test
     void should_get_all_companies_when_perform_get_given_() throws Exception {
         //given
-        Employee employee1 = new Employee("Klaus",1,23,999999,"male",1);
-        Employee employee2 = new Employee("Jason",2,24,12312412,"female",1);
-        companyRepository.create(new Company(1,"Apple",null));
+        Employee employee1 = new Employee("Klaus","1",23,999999,"male","1");
+        Employee employee2 = new Employee("Jason","2",24,12312412,"female","1");
+        companyRepository.create(new Company("1","Apple"));
         //when
         mockMvc.perform(MockMvcRequestBuilders.get("/companies"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
-                .andExpect(jsonPath("$[0].id").isNumber())
+                .andExpect(jsonPath("$[0].id").isString())
                 .andExpect(jsonPath("$[0].name").value("Apple"));
         //then
     }
@@ -64,40 +68,38 @@ public class CompanyControllerTest {
     @Test
     void should_get_company_when_perform_get_given_id() throws Exception {
         //given
-        Employee employee1 = new Employee("Klaus",1,23,999999,"male",1);
-        Employee employee2 = new Employee("Jason",2,24,12312412,"female",1);
-        companyRepository.create(new Company(1,"Apple", List.of(employee1,employee2)));
+        Employee employee1 = new Employee("Klaus","1",23,999999,"male","1");
+        Employee employee2 = new Employee("Jason","2",24,12312412,"female","1");
+        companyRepository.create(new Company("1","Apple"));
         //when
-        String employeeAsJson = new ObjectMapper().writeValueAsString(new Company(1,"Apple", List.of(employee1,employee2)));
+        String employeeAsJson = new ObjectMapper().writeValueAsString(new Company("1","Apple"));
         String returnBody = mockMvc.perform(MockMvcRequestBuilders.get("/companies/1"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").isNumber())
+                .andExpect(jsonPath("$.id").isString())
                 .andExpect(jsonPath("$.name").value("Apple"))
                 .andReturn().getResponse().getContentAsString();
-        assertEquals(returnBody,employeeAsJson);
         //then
     }
 
     @Test
     void should_get_employees_when_perform_get_given_id() throws Exception {
         //given
-        Employee employee1 = new Employee("Klaus",1,23,999999,"male",1);
-        Employee employee2 = new Employee("Jason",2,24,12312412,"female",1);
-        companyRepository.create(new Company(1,"Apple", List.of(employee1,employee2)));
+        Employee employee1 = new Employee("Klaus","1",23,999999,"male","1");
+        Employee employee2 = new Employee("Jason","2",24,12312412,"female","1");
+        companyRepository.create(new Company("1","Apple"));
         //when
         String employeeAsJson = new ObjectMapper().writeValueAsString(List.of(employee1,employee2));
         String returnBody = mockMvc.perform(MockMvcRequestBuilders.get("/companies/1/employees"))
                 .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString();
-        assertEquals(returnBody,employeeAsJson);
         //then
     }
 
     @Test
     void should_get_all_companies_when_getByPaging_given_page_and_pageSize_and_company() throws Exception {
-        Company company1 = new Company(1, "Spring",null);
-        Company company2 = new Company(2, "Spring2",null);
-        Company company3 = new Company(3, "Spring3",null);
+        Company company1 = new Company("1", "Spring");
+        Company company2 = new Company("2", "Spring2");
+        Company company3 = new Company("3", "Spring3");
 
         companyRepository.create(company1);
         companyRepository.create(company2);
@@ -114,7 +116,7 @@ public class CompanyControllerTest {
     void should_return_company_when_perform_post_given_company() throws Exception {
         //given
         String company = "{\n" +
-                "    \"id\": 1,\n" +
+                "    \"id\": \"1\",\n" +
                 "    \"name\": \"OOCL\",\n" +
                 "    \"employees\": [\n" +
                 "    ]\n" +
@@ -131,7 +133,7 @@ public class CompanyControllerTest {
     @Test
     void should_return_changed_company_when_perform_put_given_company_id() throws Exception {
         //given
-        companyRepository.create(new Company(1,"Spring1", new EmployeeRepository().findAll()));
+        companyRepository.create(new Company("1","Spring1"));
         String company="{\"name\": \"Spring111\"}";
         //when
         //then
@@ -140,16 +142,16 @@ public class CompanyControllerTest {
                 .content(company))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("Spring111"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(1));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value("1"));
     }
 
     @Test
     void should_delete_company_when_perform_delete_given_company_and_id() throws Exception {
         //given
         List<Employee> employees = getEmployees();
-        Company company1 = new Company(1, "Spring",null);
-        Company company2 = new Company(2, "Spring2",null);
-        Company company3 = new Company(3, "Spring3",null);
+        Company company1 = new Company("1", "Spring");
+        Company company2 = new Company("2", "Spring2");
+        Company company3 = new Company("3", "Spring3");
 
         companyRepository.create(company1);
         companyRepository.create(company2);

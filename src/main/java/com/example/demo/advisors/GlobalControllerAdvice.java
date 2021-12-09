@@ -1,8 +1,8 @@
-package com.example.demo.Advisors;
+package com.example.demo.advisors;
 
 
-import com.example.demo.Exception.NoCompanyFoundException;
-import com.example.demo.Exception.NoEmployeeFoundException;
+import com.example.demo.exception.NoCompanyFoundException;
+import com.example.demo.exception.NoEmployeeFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;

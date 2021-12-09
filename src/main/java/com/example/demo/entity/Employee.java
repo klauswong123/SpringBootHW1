@@ -1,17 +1,24 @@
-package com.example.demo.Entity;
+package com.example.demo.entity;
 
 
-import java.util.Arrays;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.FieldType;
+import org.springframework.data.mongodb.core.mapping.MongoId;
 
+import javax.persistence.Id;
+
+@Document
 public class Employee {
+    @MongoId(FieldType.OBJECT_ID)
+    @Id
+    private String id;
     private String name;
-    private Integer id;
     private Integer age;
     private Integer salary;
     private String gender;
 
-    private Integer companyID;
-    public Employee(String name, Integer id, Integer age, Integer salary, String gender, Integer companyID) {
+    private String companyID;
+    public Employee(String name, String id, Integer age, Integer salary, String gender, String companyID) {
         this.name = name;
         this.id = id;
         this.age = age;
@@ -21,12 +28,15 @@ public class Employee {
             this.companyID=companyID;
         }
     }
+    public Employee(){
 
-    public Integer getCompanyID() {
+    }
+
+    public String getCompanyID() {
         return this.companyID;
     }
 
-    public void setCompanyID(Integer companyID) {
+    public void setCompanyID(String companyID) {
         this.companyID = companyID;
     }
 
@@ -34,7 +44,7 @@ public class Employee {
         return name;
     }
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
@@ -54,7 +64,7 @@ public class Employee {
         this.name = name;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 

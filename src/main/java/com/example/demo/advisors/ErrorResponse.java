@@ -1,4 +1,4 @@
-package com.example.demo.Advisors;
+package com.example.demo.advisors;
 
 public class ErrorResponse {
     private Integer statusCode;
