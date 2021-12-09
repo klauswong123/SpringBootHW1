@@ -15,8 +15,7 @@ public class Company {
 
     };
 
-    public Company(String id, String name) {
-        this.id = id;
+    public Company( String name) {
         this.name = name;
     }
 

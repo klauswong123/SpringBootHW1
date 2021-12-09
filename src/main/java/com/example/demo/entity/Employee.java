@@ -29,6 +29,16 @@ public class Employee {
         }
     }
 
+    public Employee(String name, Integer age, Integer salary, String gender, String companyID) {
+        this.name = name;
+        this.age = age;
+        this.salary = salary;
+        this.gender = gender;
+        if(companyID!=null){
+            this.companyID=companyID;
+        }
+    }
+
 
     public Employee(String name, Integer age, Integer salary, String gender) {
         this.name = name;

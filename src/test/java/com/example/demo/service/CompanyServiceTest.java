@@ -40,7 +40,7 @@ public class CompanyServiceTest {
     void should_return_all_companies_when_find_all_given_companies() {
         //given
         List<Company> companies = new ArrayList<>();
-        companies.add(new Company("1","Spring"));
+        companies.add(new Company("Spring"));
 
         //when
         List<Company> actual = companyService.findAll();
@@ -53,8 +53,8 @@ public class CompanyServiceTest {
         //given
         List<Company> companies = new ArrayList<>();
 
-        Company company1 = new Company("1","Spring");
-        Company company2 = new Company("2","Spring2");
+        Company company1 = new Company("Spring");
+        Company company2 = new Company("Spring2");
         companies.add(company1);
         companies.add(company2);
         //when
@@ -67,8 +67,8 @@ public class CompanyServiceTest {
     void should_get_all_companies_when_getByPaging_given_page_and_pageSize_and_company() throws Exception {
         //given
         List<Company> companies = new ArrayList<>();
-        companies.add(new Company("1", "OOCL"));
-        companies.add(new Company("2", "OOCL2"));
+        companies.add(new Company("OOCL"));
+        companies.add(new Company("OOCL2"));
 
         Integer page = 1;
         Integer pageSize = 2;
@@ -83,7 +83,7 @@ public class CompanyServiceTest {
     @Test
     void should_return_company_when_perform_post_given_company() throws Exception {
         //given
-        Company newCompany = new Company("3", "OOCL3");
+        Company newCompany = new Company("OOCL3");
         //when
         Company actual = companyService.create(newCompany);
         //then
@@ -93,8 +93,8 @@ public class CompanyServiceTest {
     @Test
     void should_return_update_company_when_perform_put_given_company_id() throws Exception {
         //given
-        Company company = new Company("1", "OOCL3");
-        Company updatedCompany = new Company("1", "OOCLL");
+        Company company = new Company("OOCL3");
+        Company updatedCompany = new Company("OOCLL");
         company.setName(updatedCompany.getName());
         //when
         Company actual = companyService.edit("1", updatedCompany);
@@ -108,7 +108,7 @@ public class CompanyServiceTest {
     @Test
     void should_delete_company_when_perform_delete_given_company_and_id() throws Exception {
         //given
-        Company company = new Company("1", "OOCL");
+        Company company = new Company("OOCL");
 
         //when
         companyService.delete(company.getId());
