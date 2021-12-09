@@ -2,6 +2,8 @@ package com.example.demo.service;
 
 import com.example.demo.entity.Company;
 import com.example.demo.entity.Employee;
+import com.example.demo.exception.NoCompanyFoundException;
+import com.example.demo.exception.NoEmployeeFoundException;
 import com.example.demo.mapper.CompanyMapper;
 import com.example.demo.repository.CompanyRepository;
 import com.example.demo.service.CompanyService;
@@ -18,7 +20,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(SpringExtension.class)
@@ -118,13 +122,22 @@ public class CompanyServiceTest {
     @Test
     void should_delete_company_when_perform_delete_given_company_and_id() throws Exception {
         //given
-        Company company = new Company("OOCL");
-
+        Company company = new Company("Spring");
+        willDoNothing().given(companyRepository).deleteById(company.getId());
         //when
         companyService.delete(company.getId());
-
         //then
+        verify(companyRepository).deleteById(company.getId());
+        assertEquals(0, companyRepository.findAll().size());
     }
 
-
+    @Test
+    void should_throw_notFound_when_find_by_id_given_fakeId() {
+        //given
+        given(companyRepository.findById("123445"))
+                .willThrow(NoCompanyFoundException.class);
+        //when
+        //then
+        assertThrows(NoCompanyFoundException.class, () -> companyService.getByID("123445"));
+    }
 }

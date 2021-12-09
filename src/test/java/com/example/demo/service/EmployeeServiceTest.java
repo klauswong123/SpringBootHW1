@@ -137,7 +137,7 @@ public class EmployeeServiceTest {
         verify(employeeRepository).deleteById(employee.getId());
     }
     @Test
-    void should_throw_notFound_when_find_by_uid_given_fakeId() {
+    void should_throw_notFound_when_find_by_id_given_fakeId() {
         //given
         given(employeeRepository.findById("123445"))
                 .willThrow(NoEmployeeFoundException.class);
