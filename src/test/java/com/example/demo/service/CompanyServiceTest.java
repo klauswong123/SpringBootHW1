@@ -10,6 +10,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.ArrayList;
@@ -71,10 +73,10 @@ public class CompanyServiceTest {
         List<Company> companies = new ArrayList<>();
         companies.add(new Company("OOCL"));
         companies.add(new Company("OOCL2"));
-
         Integer page = 1;
         Integer pageSize = 2;
-
+        given(companyRepository.findAll(PageRequest.of(page-1, pageSize)))
+                .willReturn(new PageImpl<>(companies, PageRequest.of(page-1, pageSize), pageSize));
 
         //when`
         List<Company> actual = companyService.getByPage(page, pageSize);
@@ -87,6 +89,8 @@ public class CompanyServiceTest {
         //given
         Company newCompany = new Company("OOCL3");
         //when
+        given(companyRepository.insert(newCompany))
+                .willReturn(newCompany);
         Company actual = companyService.create(newCompany);
         //then
         assertEquals(newCompany, actual);
