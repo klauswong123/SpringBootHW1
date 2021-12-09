@@ -23,29 +23,23 @@ public class EmployeeServiceTest {
     EmployeeService employeeService;
 
 
-    private Employee getSingleEmployee(){
-        return new Employee("Klaus",20,99999999,"female");
+    private Employee createEmployee(){
+        return employeeRepository.insert(new Employee("Klaus",20,99999999,"female"));
     }
 
-    private List<Employee> getEmployees(){
-        return List.of(
-                new Employee("Klaus",20,99999999,"female"),
-                new Employee("Jason",24,123,"male"),
-                new Employee("Kam",21,112312323,"male"),
-                new Employee("jenn",24,123,"female")
-        );
+    private Employee createEmployee1(){
+        return  employeeRepository.insert(new Employee("Chris",23,999999,"male"));
     }
 
     @Test
     void should_return_all_employees_when_get_all_given_employees() {
         //given
-        List<Employee> employees = getEmployees();
+        List<Employee> employees = new ArrayList<>();
+        createEmployee();
 
         given(employeeRepository.findAll()).willReturn(employees);
         //when
-        System.out.println(employees.size());
         List<Employee> actual = employeeService.findAll();
-        System.out.println(actual.size());
         //return
         assertEquals(employees.size(),actual.size());
     }
