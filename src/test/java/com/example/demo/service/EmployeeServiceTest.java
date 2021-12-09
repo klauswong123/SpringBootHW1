@@ -23,11 +23,11 @@ public class EmployeeServiceTest {
     EmployeeService employeeService;
 
 
-    private Employee createEmployee(){
+    private Employee getEmployee(){
         return new Employee("Klaus",20,99999999,"female");
     }
 
-    private Employee createEmployee1(){
+    private Employee getEmployee1(){
         return  new Employee("Chris",23,999999,"male");
     }
 
@@ -35,7 +35,7 @@ public class EmployeeServiceTest {
     void should_return_all_employees_when_get_all_given_employees() {
         //given
         List<Employee> employees = new ArrayList<>();
-        createEmployee();
+        getEmployee();
 
         given(employeeRepository.findAll()).willReturn(employees);
         //when
@@ -47,7 +47,7 @@ public class EmployeeServiceTest {
     @Test
     void should_update_employee_when_update_given_employees() {
         //given
-        Employee employee=createEmployee();
+        Employee employee= getEmployee();
         Employee updatedEmployee = new Employee("Jason", 10, 2000,"male");
         given(employeeRepository.findById(any()))
                 .willReturn(java.util.Optional.of(employee));
@@ -65,8 +65,8 @@ public class EmployeeServiceTest {
     @Test
     void should_employee_when_get_given_id() {
         //given
-        Employee employee = createEmployee();
-        given(employeeRepository.findById(any()))
+        Employee employee = getEmployee();
+        given(employeeRepository.findById(employee.getId()))
                 .willReturn(java.util.Optional.of(employee));
         //when
         Employee actual = employeeService.getByID(employee.getId());
@@ -79,12 +79,10 @@ public class EmployeeServiceTest {
     void should_employee_when_get_given_gender() {
         //given
         List<Employee> employees = new ArrayList<>();
-        Employee employee1 = new Employee("Klaus","1",20,99999999,"female","1");
-        Employee employee2 = new Employee("Nick","2",50,1000,"male","1");
-        Employee employee3 = new Employee("Jack","3",60,1,"male","1");
+        Employee employee1 = getEmployee();
+        Employee employee2 = getEmployee1();
         employees.add(employee1);
         employees.add(employee2);
-        employees.add(employee3);
         given(employeeRepository.findByGender("male"))
                 .willReturn(employees);
         //when
