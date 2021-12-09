@@ -28,9 +28,19 @@ public class Employee {
             this.companyID=companyID;
         }
     }
+
+
+    public Employee(String name, Integer age, Integer salary, String gender) {
+        this.name = name;
+        this.age = age;
+        this.salary = salary;
+        this.gender = gender;
+    }
+
     public Employee(){
 
     }
+
 
     public String getCompanyID() {
         return this.companyID;

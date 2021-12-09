@@ -1,15 +1,11 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.Employee;
-import com.example.demo.mapper.EmployeeMapper;
-import com.example.demo.repository.EmployeeRepositoryMongo;
-import com.example.demo.service.EmployeeService;
+import com.example.demo.repository.EmployeeRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.stereotype.Repository;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.ArrayList;
@@ -22,9 +18,7 @@ import static org.mockito.Mockito.*;
 @ExtendWith(SpringExtension.class)
 public class EmployeeServiceTest {
     @Mock
-    EmployeeMapper employeeMapper;
-    @Mock
-    EmployeeRepositoryMongo employeeRepositoryMongo;
+    EmployeeRepository employeeRepository;
     @InjectMocks
     EmployeeService employeeService;
 
@@ -32,7 +26,7 @@ public class EmployeeServiceTest {
     void should_return_all_employees_when_get_all_given_employees() {
         //given
         List<Employee> employees = new ArrayList<>();
-        given(employeeRepositoryMongo.findAll()).willReturn(employees);
+        given(employeeRepository.findAll()).willReturn(employees);
         //when
         System.out.println(employees.size());
         List<Employee> actual = employeeService.findAll();
@@ -46,11 +40,11 @@ public class EmployeeServiceTest {
         //given
         Employee employee = new Employee("Klaus","1",20,99999999,"female","1");
         Employee updateEmployee = new Employee("Klaus","1",23,99999999,"female","1");
-        given(employeeRepositoryMongo.save(updateEmployee))
+        given(employeeRepository.save(updateEmployee))
                 .willReturn(employee);
         //when
         Employee actual = employeeService.edit(employee.getId(),updateEmployee);
-        verify(employeeRepositoryMongo).save(updateEmployee);
+        verify(employeeRepository).save(updateEmployee);
         //return
         assertEquals(employee,actual);
     }
@@ -59,11 +53,11 @@ public class EmployeeServiceTest {
     void should_employee_when_get_given_id() {
         //given
         Employee employee = new Employee("Klaus","1",20,99999999,"female","1");
-        given(employeeRepositoryMongo.findById(any()))
+        given(employeeRepository.findById(any()))
                 .willReturn(java.util.Optional.of(employee));
         //when
         Employee actual = employeeService.getByID(employee.getId());
-        verify(employeeRepositoryMongo).findById(employee.getId());
+        verify(employeeRepository).findById(employee.getId());
         //return
         assertEquals(employee,actual);
     }
@@ -78,11 +72,11 @@ public class EmployeeServiceTest {
         employees.add(employee1);
         employees.add(employee2);
         employees.add(employee3);
-        given(employeeRepositoryMongo.findByGender("male"))
+        given(employeeRepository.findByGender("male"))
                 .willReturn(employees);
         //when
         List<Employee> actual = employeeService.getByGender("male");
-        verify(employeeRepositoryMongo).findByGender("male");
+        verify(employeeRepository).findByGender("male");
         //return
         assertEquals(employees,actual);
     }
@@ -91,11 +85,11 @@ public class EmployeeServiceTest {
     void should_create_employee_when_create_given_employee() {
         //given
         Employee employee1 = new Employee("Klaus","1",20,99999999,"female","1");
-        given(employeeRepositoryMongo.insert(employee1))
+        given(employeeRepository.insert(employee1))
                 .willReturn(employee1);
         //when
         Employee actual = employeeService.create(employee1);
-        verify(employeeRepositoryMongo).insert(employee1);
+        verify(employeeRepository).insert(employee1);
         //return
         assertEquals(employee1,actual);
     }
