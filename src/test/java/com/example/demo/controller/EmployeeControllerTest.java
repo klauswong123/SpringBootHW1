@@ -20,6 +20,7 @@ import java.util.List;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 @SpringBootTest
@@ -57,12 +58,28 @@ class EmployeeControllerTest {
 		Employee employee = getSingleEmployee();
 		employeeRepository.insert(employee);
 		//when
-		mockMvc.perform(MockMvcRequestBuilders.get("/employees"))
+		mockMvc.perform(get("/employees"))
 				.andExpect(MockMvcResultMatchers.status().isOk())
 				.andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(1)))
 				.andExpect(MockMvcResultMatchers.jsonPath("$[0].id").isString())
 				.andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("Klaus"));
 		//then
+	}
+
+	@Test
+	void should_return_employee_when_perform_get_given_employee_id() throws Exception  {
+		//given
+		Employee employee = getSingleEmployee();
+		Employee saveEmployee = employeeRepository.save(employee);
+		//when
+		//then
+		mockMvc.perform(get("/employees/" + saveEmployee.getId())
+						.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.jsonPath("$.id").value(saveEmployee.getId()))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.name").value(employee.getName()))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.age").value(employee.getAge()))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.gender").value(employee.getGender()));
 	}
 
 	@Test
@@ -91,7 +108,7 @@ class EmployeeControllerTest {
 		employeeRepository.insert(employee);
 		String employeeAsJson = new ObjectMapper().writeValueAsString(employee);
 		//when
-		String returnBody = mockMvc.perform(MockMvcRequestBuilders.get("/employees/1"))
+		String returnBody = mockMvc.perform(get("/employees/1"))
 				.andExpect(MockMvcResultMatchers.status().isOk())
 				.andExpect(MockMvcResultMatchers.jsonPath("$.id").isString())
 				.andReturn().getResponse().getContentAsString();
@@ -109,7 +126,7 @@ class EmployeeControllerTest {
 		employeeRepository.insert(employee3);
 		//when
 		//then
-		mockMvc.perform(MockMvcRequestBuilders.get("/employees/?page=1&pageSize=2"))
+		mockMvc.perform(get("/employees/?page=1&pageSize=2"))
 				.andExpect(MockMvcResultMatchers.status().isOk())
 				.andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(2)))
 				.andExpect(MockMvcResultMatchers.jsonPath("$[0].id").isString())
@@ -133,7 +150,7 @@ class EmployeeControllerTest {
 		employeeRepository.insert(employee3);
 		//when
 		ObjectMapper mapper = new ObjectMapper();
-		mockMvc.perform(MockMvcRequestBuilders.get("/employees?gender=male"))
+		mockMvc.perform(get("/employees?gender=male"))
 				.andExpect(MockMvcResultMatchers.status().isOk())
 				.andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(2)))
 				.andExpect(MockMvcResultMatchers.jsonPath("$[0].id").isString())
