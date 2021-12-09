@@ -11,12 +11,11 @@ public class Company {
     private String name;
     private List<Employee> employees = new ArrayList<>();
 
-    @SafeVarargs
-    public Company(Integer id, String name, List<Employee>... employees) {
+    public Company(Integer id, String name, List<Employee> employees) {
         this.id = id;
         this.name = name;
-        if(employees.length!=0){
-            this.employees = employees[0];
+        if (employees!=null){
+            this.employees = employees;
         }
     }
 
@@ -37,6 +36,7 @@ public class Company {
     }
 
     public List<Employee> getEmployees() {
+        if (employees==null) return null;
         return employees;
     }
 

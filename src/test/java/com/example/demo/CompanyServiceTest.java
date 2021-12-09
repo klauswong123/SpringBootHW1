@@ -53,7 +53,7 @@ public class CompanyServiceTest {
     void should_return_all_companies_when_find_all_given_companies() {
         //given
         List<Company> companies = new ArrayList<>();
-        companies.add(new Company(1,"Spring"));
+        companies.add(new Company(1,"Spring",null));
         given(companyRepository.findAll())
                 .willReturn(companies);
 
@@ -68,8 +68,8 @@ public class CompanyServiceTest {
         //given
         List<Company> companies = new ArrayList<>();
 
-        Company company1 = new Company(1,"Spring");
-        Company company2 = new Company(2,"Spring2");
+        Company company1 = new Company(1,"Spring",null);
+        Company company2 = new Company(2,"Spring2",null);
         companies.add(company1);
         companies.add(company2);
         given(companyRepository.getByID(1))
@@ -85,8 +85,8 @@ public class CompanyServiceTest {
     void should_get_all_companies_when_getByPaging_given_page_and_pageSize_and_company() throws Exception {
         //given
         List<Company> companies = new ArrayList<>();
-        companies.add(new Company(1, "OOCL"));
-        companies.add(new Company(2, "OOCL2"));
+        companies.add(new Company(1, "OOCL",null));
+        companies.add(new Company(2, "OOCL2",null));
 
         Integer page = 1;
         Integer pageSize = 2;
@@ -103,7 +103,7 @@ public class CompanyServiceTest {
     @Test
     void should_return_company_when_perform_post_given_company() throws Exception {
         //given
-        Company newCompany = new Company(3, "OOCL3");
+        Company newCompany = new Company(3, "OOCL3",null);
         given(companyRepository.create(newCompany))
                 .willReturn(newCompany);
         //when
@@ -115,12 +115,13 @@ public class CompanyServiceTest {
     @Test
     void should_return_update_company_when_perform_put_given_company_id() throws Exception {
         //given
-        Company company = new Company(3, "OOCL3");
-        Company updatedCompany = new Company(3, "OOCLL");
+        Company company = new Company(1, "OOCL3",null);
+        Company updatedCompany = new Company(1, "OOCLL",null);
         given(companyRepository.update(1, updatedCompany))
                 .willReturn(company);
         //when
         Company actual = companyService.edit(1, updatedCompany);
+        System.out.println();
         //then
         assertEquals(updatedCompany.getId(), actual.getId());
 
@@ -129,7 +130,7 @@ public class CompanyServiceTest {
     @Test
     void should_delete_company_when_perform_delete_given_company_and_id() throws Exception {
         //given
-        Company company = new Company(1, "OOCL");
+        Company company = new Company(1, "OOCL",null);
 
         //when
         companyService.delete(company.getId());

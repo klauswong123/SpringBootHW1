@@ -22,7 +22,9 @@ public class CompanyService {
     }
 
     public List<Company> findAll() {
-        return companyRepository.findAll();
+        List<Company> companies= companyRepository.findAll();
+        companies.forEach(company -> company.setEmployees(null));
+        return companies;
     }
 
     public Company edit(Integer id, Company updateCompany) {

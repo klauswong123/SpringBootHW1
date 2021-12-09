@@ -20,12 +20,11 @@ public class CompanyRepository {
     private List<Company> companies = new ArrayList<>();
 
     CompanyRepository(EmployeeRepository employeeRepository){
-        this.companies.add(new Company(1,"Apple"));
-        this.companies.add(new Company(2,"MineCraft"));
+        this.companies.add(new Company(1,"Apple",null));
+        this.companies.add(new Company(2,"MineCraft",null));
         this.employeeRepository = employeeRepository;
     }
     public List<Company> findAll(){
-        companies.forEach(company -> company.setEmployees(null));
         return companies;
     }
 
@@ -50,7 +49,7 @@ public class CompanyRepository {
 
     public Company update(Integer id, Company company) {
         Company targetCompany = companies.stream()
-                .filter(singleEmployee -> singleEmployee.getId().equals(id))
+                .filter(singlecompany -> singlecompany.getId().equals(id))
                 .findFirst().orElseThrow(NullPointerException::new);
         if(company.getEmployees()!=null) targetCompany.setEmployees(company.getEmployees());
         if(company.getName()!=null) targetCompany.setName(company.getName());

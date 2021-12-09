@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 public class EmployeeRepository {
     private List<Employee> employees= new ArrayList<>();
 
-    EmployeeRepository(){
+    public EmployeeRepository(){
         this.employees.add(new Employee("Klaus",1,23,999999,"male",1));
         this.employees.add(new Employee("Jason",2,24,12312412,"female",1));
     }
