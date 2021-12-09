@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.Employee;
+import com.example.demo.exception.NoEmployeeFoundException;
 import com.example.demo.repository.EmployeeRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
@@ -125,13 +127,24 @@ public class EmployeeServiceTest {
         assertEquals(actual,employees);
     }
 
-//    @Test
-//    void should_delete_employee_when_delete_given_id() {
-//        //given
-//        Employee employee = new Employee("Klaus","1",20,99999999,"female","1");
-//        given(employeeRepositoryMongo.deleteById(employee.getId()))
-//                .willReturn(employee);
-//        //when
-//        verify(employeeRepositoryMongo).delete(employee.getId());
-//    }
+    @Test
+    void should_delete_employee_when_delete_given_id() {
+        //given
+        Employee employee = getEmployee();
+        //When
+        employeeService.delete(employee.getId());
+        //then
+        verify(employeeRepository).deleteById(employee.getId());
+    }
+    @Test
+    void should_throw_notFound_when_find_by_uid_given_fakeId() {
+        //given
+        given(employeeRepository.findById("123445"))
+                .willThrow(NoEmployeeFoundException.class);
+        //when
+        //then
+        assertThrows(NoEmployeeFoundException.class, () -> employeeService.getByID("123445"));
+    }
+
+
 }
