@@ -22,6 +22,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -57,7 +58,7 @@ public class CompanyControllerTest {
     }
 
     private Company preCreateCompany2(){
-        Company company = companyRepository.insert(new Company("Apple"));
+        Company company = companyRepository.insert(new Company("Wealth"));
         employeeRepository.insert(new Employee("Kam",23,999999,"male",company.getId()));
         employeeRepository.insert(new Employee("Pang",24,12312412,"female",company.getId()));
         return company;
@@ -104,27 +105,28 @@ public class CompanyControllerTest {
     void should_get_all_companies_when_getByPaging_given_page_and_pageSize_and_company() throws Exception {
         String page = "1";
         String pageSize = "2";
-
+        Company company = preCreateCompany1();
+        Company company1 = preCreateCompany2();
         mockMvc.perform(MockMvcRequestBuilders.get("/companies?page="+page+"&pageSize="+pageSize))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(2)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[*].id", containsInAnyOrder(company.getId(), company1.getId())));
     }
 
     @Test
     void should_return_company_when_perform_post_given_company() throws Exception {
         //given
         String company = "{\n" +
-                "    \"id\": \"1\",\n" +
-                "    \"name\": \"OOCL\",\n" +
-                "    \"employees\": [\n" +
-                "    ]\n" +
+                "    \"name\": \"OOCL\"\n" +
                 "}";
-
         //when
         //then
         mockMvc.perform(post("/companies")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(company))
-                .andExpect(status().isCreated());
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id").isString())
+                .andExpect(jsonPath("$.name").value("OOCL"));
     }
 
     @Test
