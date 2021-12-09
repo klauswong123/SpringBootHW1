@@ -182,4 +182,16 @@ class EmployeeControllerTest {
 		assertEquals(0, employeeRepository.findAll().size());
 	}
 
+	@Test
+	void should_delete_employee_when_perform_delete_given_employee_and_id() throws Exception {
+		//given
+		Employee employee1 = getSingleEmployee();
+		Employee employee3 = employeeRepository.insert(employee1);
+		employeeRepository.delete(employee3);
+		//when
+		//then
+		mockMvc.perform(MockMvcRequestBuilders.get("/employees/{id}",employee3.getId()))
+				.andExpect(MockMvcResultMatchers.status().isNotFound());
+	}
+
 }
