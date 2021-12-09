@@ -1,8 +1,10 @@
-package com.example.demo;
+package com.example.demo.controller;
 
 import com.example.demo.entity.Employee;
 import com.example.demo.mapper.EmployeeMapper;
+import com.example.demo.repository.EmployeeRepositoryMongo;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,29 +26,26 @@ class EmployeeControllerTest {
 	@Autowired
 	MockMvc mockMvc;
 	@Autowired
-	EmployeeRepository employeeRepository;
-	@Autowired
 	EmployeeMapper employeeMapper;
+	@Autowired
+	EmployeeRepositoryMongo employeeRepositoryMongo;
 
-	@BeforeEach
-	void cleanRepository(){
-		employeeRepository.clearAll();
+	@AfterEach
+	void cleanRepo(){
+		employeeRepositoryMongo.deleteAll();
 	}
 
 	@Test
 	void should_get_all_employees_when_perform_given_employees() throws Exception {
-		//given
-		Employee employee = new Employee("Klaus","1",20,99999999,"female","1");
-		employeeRepository.create(employee);
+//		//given
+//		Employee employee = new Employee("Klaus","1",20,99999999,"female","1");
+//		employeeRepositoryMongo.insert(employee);
 		//when
 		mockMvc.perform(MockMvcRequestBuilders.get("/employees"))
 				.andExpect(MockMvcResultMatchers.status().isOk())
-				.andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(1)))
+				.andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(2)))
 				.andExpect(MockMvcResultMatchers.jsonPath("$[0].id").isString())
-				.andExpect(MockMvcResultMatchers.jsonPath("$[0].age").value(20))
-				.andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("Klaus"))
-				.andExpect(MockMvcResultMatchers.jsonPath("$[0].gender").value("female"))
-				.andExpect(MockMvcResultMatchers.jsonPath("$[0].salary").value(99999999));
+				.andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("klaus"));
 		//then
 	}
 
@@ -73,7 +72,7 @@ class EmployeeControllerTest {
 	void should_get_employee_when_perform_get_given_id() throws Exception {
 		//given
 		Employee employee = new Employee("Klaus","1",20,99999999,"female","1");
-		employeeRepository.create(employee);
+		employeeRepositoryMongo.insert(employee);
 		String employeeAsJson = new ObjectMapper().writeValueAsString(employee);
 		//when
 		String returnBody = mockMvc.perform(MockMvcRequestBuilders.get("/employees/1"))
@@ -87,11 +86,11 @@ class EmployeeControllerTest {
 	void should_get_employees_when_perform_get_given_page_and_pageSize() throws Exception {
 		//given
 		Employee employee1 = new Employee("Klaus","1",20,99999999,"female","1");
-		employeeRepository.create(employee1);
+		employeeRepositoryMongo.insert(employee1);
 		Employee employee2 = new Employee("Nick","2",50,1000,"male","1");
-		employeeRepository.create(employee2);
+		employeeRepositoryMongo.insert(employee2);
 		Employee employee3 = new Employee("Jack","3",60,1,"male","1");
-		employeeRepository.create(employee3);
+		employeeRepositoryMongo.insert(employee3);
 		//when
 		//then
 		mockMvc.perform(MockMvcRequestBuilders.get("/employees/?page=1&pageSize=2"))
@@ -111,11 +110,11 @@ class EmployeeControllerTest {
 	void should_get_employee_when_perform_get_given_gender() throws Exception {
 		//given
 		Employee employee = new Employee("Klaus","1",20,99999999,"female","1");
-		employeeRepository.create(employee);
+		employeeRepositoryMongo.insert(employee);
 		Employee employee2 = new Employee("Nick","2",50,1000,"male","1");
-		employeeRepository.create(employee2);
+		employeeRepositoryMongo.insert(employee2);
 		Employee employee3 = new Employee("Jack","3",60,1,"male","1");
-		employeeRepository.create(employee3);
+		employeeRepositoryMongo.insert(employee3);
 		//when
 		ObjectMapper mapper = new ObjectMapper();
 		mockMvc.perform(MockMvcRequestBuilders.get("/employees?gender=male"))
@@ -136,7 +135,7 @@ class EmployeeControllerTest {
 	void should_return_employee_when_perform_put_given_updated_employee() throws Exception {
 		//given
 		Employee employee = new Employee("Klaus","1",20,99999999,"female","1");
-		employeeRepository.create(employee);
+		employeeRepositoryMongo.insert(employee);
 		String updatedEmployee="{\n" +
 				"    \"age\": 23,\n" +
 				"    \"salary\": 123456\n" +
@@ -157,17 +156,17 @@ class EmployeeControllerTest {
 	void should_delete_one_employee_when_perform_delete_given_id() throws Exception {
 		//given
 		Employee employee = new Employee("Klaus","1",20,99999999,"female","1");
-		employeeRepository.create(employee);
+		employeeRepositoryMongo.insert(employee);
 		Employee employee2 = new Employee("Nick","2",50,1000,"male","1");
-		employeeRepository.create(employee2);
+		employeeRepositoryMongo.insert(employee2);
 		Employee employee3 = new Employee("Jack","3",60,1,"male","1");
-		employeeRepository.create(employee3);
+		employeeRepositoryMongo.insert(employee3);
 		//when
 		mockMvc.perform(MockMvcRequestBuilders.delete("/employees/3"))
 				.andExpect(MockMvcResultMatchers.status().isNoContent());
 
 		//then
-		assertEquals(2,employeeRepository.findAll().size());
+		assertEquals(2,employeeRepositoryMongo.findAll().size());
 	}
 
 }

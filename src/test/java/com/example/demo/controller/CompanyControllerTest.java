@@ -1,11 +1,15 @@
-package com.example.demo;
+package com.example.demo.controller;
 import com.example.demo.entity.Company;
 import com.example.demo.entity.Employee;
 import com.example.demo.mapper.CompanyMapper;
 import com.example.demo.mapper.EmployeeMapper;
+import com.example.demo.repository.CompanyReposityMongo;
+import com.example.demo.repository.EmployeeRepositoryMongo;
+import com.example.demo.service.CompanyService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -30,17 +34,14 @@ public class CompanyControllerTest {
     @Autowired
     MockMvc mockMvc;
     @Autowired
-    CompanyRepository companyRepository;
-    @Autowired
-    EmployeeRepository employeeRepository;
-    @Autowired
     CompanyMapper companyMapper;
     @Autowired
     EmployeeMapper employeeMapper;
+    @Autowired
+    CompanyService companyService;
+    @Mock
+    CompanyReposityMongo companyReposityMongo;
     @BeforeEach
-    void cleanRepository(){
-        companyRepository.clearAll();
-    }
 
     private List<Employee> getEmployees(){
         List<Employee> employees = new ArrayList<>();
@@ -55,7 +56,7 @@ public class CompanyControllerTest {
         //given
         Employee employee1 = new Employee("Klaus","1",23,999999,"male","1");
         Employee employee2 = new Employee("Jason","2",24,12312412,"female","1");
-        companyRepository.create(new Company("1","Apple"));
+        companyReposityMongo.insert(new Company("1","Apple"));
         //when
         mockMvc.perform(MockMvcRequestBuilders.get("/companies"))
                 .andExpect(status().isOk())
@@ -70,7 +71,7 @@ public class CompanyControllerTest {
         //given
         Employee employee1 = new Employee("Klaus","1",23,999999,"male","1");
         Employee employee2 = new Employee("Jason","2",24,12312412,"female","1");
-        companyRepository.create(new Company("1","Apple"));
+        companyReposityMongo.insert(new Company("1","Apple"));
         //when
         String employeeAsJson = new ObjectMapper().writeValueAsString(new Company("1","Apple"));
         String returnBody = mockMvc.perform(MockMvcRequestBuilders.get("/companies/1"))
@@ -86,7 +87,7 @@ public class CompanyControllerTest {
         //given
         Employee employee1 = new Employee("Klaus","1",23,999999,"male","1");
         Employee employee2 = new Employee("Jason","2",24,12312412,"female","1");
-        companyRepository.create(new Company("1","Apple"));
+        companyReposityMongo.insert(new Company("1","Apple"));
         //when
         String employeeAsJson = new ObjectMapper().writeValueAsString(List.of(employee1,employee2));
         String returnBody = mockMvc.perform(MockMvcRequestBuilders.get("/companies/1/employees"))
@@ -101,9 +102,9 @@ public class CompanyControllerTest {
         Company company2 = new Company("2", "Spring2");
         Company company3 = new Company("3", "Spring3");
 
-        companyRepository.create(company1);
-        companyRepository.create(company2);
-        companyRepository.create(company3);
+        companyReposityMongo.insert(company1);
+        companyReposityMongo.insert(company2);
+        companyReposityMongo.insert(company3);
 
         String page = "1";
         String pageSize = "2";
@@ -133,7 +134,7 @@ public class CompanyControllerTest {
     @Test
     void should_return_changed_company_when_perform_put_given_company_id() throws Exception {
         //given
-        companyRepository.create(new Company("1","Spring1"));
+        companyReposityMongo.insert(new Company("1","Spring1"));
         String company="{\"name\": \"Spring111\"}";
         //when
         //then
@@ -153,9 +154,9 @@ public class CompanyControllerTest {
         Company company2 = new Company("2", "Spring2");
         Company company3 = new Company("3", "Spring3");
 
-        companyRepository.create(company1);
-        companyRepository.create(company2);
-        companyRepository.create(company3);
+        companyReposityMongo.insert(company1);
+        companyReposityMongo.insert(company2);
+        companyReposityMongo.insert(company3);
         //when
         //then
         mockMvc.perform(MockMvcRequestBuilders.delete("/companies/{id}", company1.getId()))
