@@ -62,7 +62,9 @@ class EmployeeControllerTest {
 				.andExpect(MockMvcResultMatchers.status().isOk())
 				.andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(1)))
 				.andExpect(MockMvcResultMatchers.jsonPath("$[0].id").isString())
-				.andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("Klaus"));
+				.andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value(employee.getName()))
+				.andExpect(MockMvcResultMatchers.jsonPath("$[0].age").value(employee.getAge()))
+				.andExpect(MockMvcResultMatchers.jsonPath("$[0].gender").value(employee.getGender()));
 		//then
 	}
 
@@ -70,7 +72,7 @@ class EmployeeControllerTest {
 	void should_return_employee_when_perform_get_given_employee_id() throws Exception  {
 		//given
 		Employee employee = getSingleEmployee();
-		Employee saveEmployee = employeeRepository.save(employee);
+		Employee saveEmployee = employeeRepository.insert(employee);
 		//when
 		//then
 		mockMvc.perform(get("/employees/" + saveEmployee.getId())
@@ -84,6 +86,7 @@ class EmployeeControllerTest {
 
 	@Test
 	void should_return_employee_when_perform_post_given_employee() throws Exception {
+		employeeRepository.insert(getSingleEmployee());
 		String employee="{\n" +
 				"    \"name\": \"Klaus\",\n" +
 				"    \"age\": 23,\n" +
