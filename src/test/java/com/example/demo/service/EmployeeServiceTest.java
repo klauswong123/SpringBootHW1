@@ -24,11 +24,11 @@ public class EmployeeServiceTest {
 
 
     private Employee createEmployee(){
-        return employeeRepository.insert(new Employee("Klaus",20,99999999,"female"));
+        return new Employee("Klaus",20,99999999,"female");
     }
 
     private Employee createEmployee1(){
-        return  employeeRepository.insert(new Employee("Chris",23,999999,"male"));
+        return  new Employee("Chris",23,999999,"male");
     }
 
     @Test
@@ -47,21 +47,25 @@ public class EmployeeServiceTest {
     @Test
     void should_update_employee_when_update_given_employees() {
         //given
-        Employee employee = new Employee("Klaus","1",20,99999999,"female","1");
-        Employee updateEmployee = new Employee("Klaus","1",23,99999999,"female","1");
-        given(employeeRepository.save(updateEmployee))
+        Employee employee=createEmployee();
+        Employee updatedEmployee = new Employee("Jason", 10, 2000,"male");
+        given(employeeRepository.findById(any()))
+                .willReturn(java.util.Optional.of(employee));
+        employee.setAge(updatedEmployee.getAge());
+        employee.setSalary(updatedEmployee.getSalary());
+        given(employeeRepository.save(any(Employee.class)))
                 .willReturn(employee);
         //when
-        Employee actual = employeeService.edit(employee.getId(),updateEmployee);
-        verify(employeeRepository).save(updateEmployee);
-        //return
-        assertEquals(employee,actual);
+        Employee actual = employeeService.edit(any(), updatedEmployee);
+
+        //then
+        assertEquals(employee, actual);
     }
 
     @Test
     void should_employee_when_get_given_id() {
         //given
-        Employee employee = new Employee("Klaus","1",20,99999999,"female","1");
+        Employee employee = createEmployee();
         given(employeeRepository.findById(any()))
                 .willReturn(java.util.Optional.of(employee));
         //when
