@@ -4,6 +4,7 @@ import com.example.demo.entity.Employee;
 import com.example.demo.exception.NoEmployeeFoundException;
 import com.example.demo.mapper.EmployeeMapper;
 import com.example.demo.repository.EmployeeRepository;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -42,10 +43,7 @@ public class EmployeeService {
     }
 
     public List<Employee> getByPage(int page, int pageSize) {
-        return employeeRepository.findAll().stream()
-                .skip((long) (page-1) *pageSize)
-                .limit(pageSize)
-                .collect(Collectors.toList());
+        return employeeRepository.findAll(PageRequest.of(page-1, pageSize)).toList();
     }
 
     public void delete(String id) {

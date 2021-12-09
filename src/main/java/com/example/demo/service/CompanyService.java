@@ -5,6 +5,7 @@ import com.example.demo.exception.NoCompanyFoundException;
 import com.example.demo.mapper.CompanyMapper;
 import com.example.demo.mapper.EmployeeMapper;
 import com.example.demo.repository.CompanyRepository;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -42,10 +43,7 @@ public class CompanyService {
     }
 
     public List<Company> getByPage(int page, int pageSize) {
-        return companyRepository.findAll().stream()
-                .skip((long) (page-1) *pageSize)
-                .limit(pageSize)
-                .collect(Collectors.toList());
+        return companyRepository.findAll(PageRequest.of(page-1, pageSize)).toList();
     }
 
     public void delete(String id) {

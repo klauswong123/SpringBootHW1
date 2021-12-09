@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.ArrayList;
@@ -95,7 +97,7 @@ public class EmployeeServiceTest {
     @Test
     void should_create_employee_when_create_given_employee() {
         //given
-        Employee employee1 = new Employee("Klaus","1",20,99999999,"female","1");
+        Employee employee1 = getEmployee();
         given(employeeRepository.insert(employee1))
                 .willReturn(employee1);
         //when
@@ -105,21 +107,23 @@ public class EmployeeServiceTest {
         assertEquals(employee1,actual);
     }
 
-//    @Test
-//    void should_get_employees_when_get_given_page_and_pageSize() {
-//        //given
-//        List<Employee> employees = new ArrayList<>();
-//        Integer page = 1;
-//        Integer pageSize = 2;
-//        Employee employee = new Employee("Klaus","1",20,99999999,"female","1");
-//        given(employeeRepositoryMongo.(page,pageSize))
-//                .willReturn(employees);
-//        //when
-//        List<Employee> actual = employeeService.getByPage(page,pageSize);
-//        verify(employeeRepositoryMongo).getByPage(page,pageSize);
-//        //return
-//        assertEquals(employees,actual);
-//    }
+    @Test
+    void should_get_employees_when_get_given_page_and_pageSize() {
+        //given
+        List<Employee> employees = new ArrayList<>();
+        Employee employee1 = getEmployee();
+        Employee employee2 = getEmployee1();
+        employees.add(employee1);
+        employees.add(employee2);
+        given(employeeRepository.findAll(PageRequest.of(0, 2)))
+                .willReturn(new PageImpl<>(employees, PageRequest.of(0, 2), 2));
+
+        //When
+        List<Employee> actual = employeeService.getByPage(1,2);
+        //then
+        verify(employeeRepository).findAll(PageRequest.of(0, 2));
+        assertEquals(actual,employees);
+    }
 
 //    @Test
 //    void should_delete_employee_when_delete_given_id() {
