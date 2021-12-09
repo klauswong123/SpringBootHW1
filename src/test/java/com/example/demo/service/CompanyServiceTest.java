@@ -102,8 +102,12 @@ public class CompanyServiceTest {
         Company company = new Company("OOCL3");
         Company updatedCompany = new Company("OOCLL");
         company.setName(updatedCompany.getName());
+        given(companyRepository.findById(company.getId()))
+                .willReturn(java.util.Optional.of(company));
+        given(companyRepository.save(company))
+                .willReturn(company);
         //when
-        Company actual = companyService.edit("1", updatedCompany);
+        Company actual = companyService.edit(company.getId(), updatedCompany);
         System.out.println(actual.getName());
         //then
         assertEquals(updatedCompany.getId(), actual.getId());
