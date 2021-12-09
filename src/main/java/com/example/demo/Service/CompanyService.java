@@ -27,8 +27,11 @@ public class CompanyService {
         return companies;
     }
 
-    public Company edit(Integer id, Company updateCompany) {
-        return companyRepository.update(id,updateCompany);
+    public Company edit(Integer id, Company company) {
+        Company targetCompany = getByID(id);
+        if(company.getName()!=null) targetCompany.setName(company.getName());
+        companyRepository.update(id,targetCompany);
+        return targetCompany;
     }
 
     public Company getByID(Integer id) {

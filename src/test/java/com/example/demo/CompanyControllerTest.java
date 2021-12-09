@@ -3,6 +3,7 @@ import com.example.demo.Entity.Company;
 import com.example.demo.Entity.Employee;
 import com.example.demo.Repository.CompanyRepository;
 import com.example.demo.Repository.EmployeeRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,10 +68,28 @@ public class CompanyControllerTest {
         Employee employee2 = new Employee("Jason",2,24,12312412,"female",1);
         companyRepository.create(new Company(1,"Apple", List.of(employee1,employee2)));
         //when
-        mockMvc.perform(MockMvcRequestBuilders.get("/companies/1"))
+        String employeeAsJson = new ObjectMapper().writeValueAsString(new Company(1,"Apple", List.of(employee1,employee2)));
+        String returnBody = mockMvc.perform(MockMvcRequestBuilders.get("/companies/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").isNumber())
-                .andExpect(jsonPath("$.name").value("Apple"));
+                .andExpect(jsonPath("$.name").value("Apple"))
+                .andReturn().getResponse().getContentAsString();
+        assertEquals(returnBody,employeeAsJson);
+        //then
+    }
+
+    @Test
+    void should_get_employees_when_perform_get_given_id() throws Exception {
+        //given
+        Employee employee1 = new Employee("Klaus",1,23,999999,"male",1);
+        Employee employee2 = new Employee("Jason",2,24,12312412,"female",1);
+        companyRepository.create(new Company(1,"Apple", List.of(employee1,employee2)));
+        //when
+        String employeeAsJson = new ObjectMapper().writeValueAsString(List.of(employee1,employee2));
+        String returnBody = mockMvc.perform(MockMvcRequestBuilders.get("/companies/1/employees"))
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString();
+        assertEquals(returnBody,employeeAsJson);
         //then
     }
 

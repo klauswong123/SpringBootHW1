@@ -10,23 +10,14 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
-import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
 public class CompanyServiceTest {
@@ -38,9 +29,6 @@ public class CompanyServiceTest {
 
     @InjectMocks
     CompanyService companyService;
-
-    @InjectMocks
-    EmployeeService employeeService;
 
     private List<Employee> getEmployees() {
         List<Employee> employees = new ArrayList<>();
@@ -116,15 +104,19 @@ public class CompanyServiceTest {
         //given
         Company company = new Company(1, "OOCL3",null);
         Company updatedCompany = new Company(1, "OOCLL",null);
+        company.setName(updatedCompany.getName());
+        given(companyRepository.getByID(1))
+                .willReturn(company);
         given(companyRepository.update(1, updatedCompany))
                 .willReturn(company);
         //when
         Company actual = companyService.edit(1, updatedCompany);
-        System.out.println();
+        System.out.println(actual.getName());
         //then
         assertEquals(updatedCompany.getId(), actual.getId());
 
     }
+
 
     @Test
     void should_delete_company_when_perform_delete_given_company_and_id() throws Exception {

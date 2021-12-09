@@ -48,12 +48,9 @@ public class CompanyRepository {
     }
 
     public Company update(Integer id, Company company) {
-        Company targetCompany = getByID(id);
-        if(company.getEmployees()!=null) targetCompany.setEmployees(company.getEmployees());
-        if(company.getName()!=null) targetCompany.setName(company.getName());
         companies.remove(getByID(id));
         companies.add(company);
-        return targetCompany;
+        return company;
     }
 
     public Company delete(Integer id) {
