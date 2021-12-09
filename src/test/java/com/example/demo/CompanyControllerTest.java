@@ -39,8 +39,8 @@ public class CompanyControllerTest {
 
     private List<Employee> getEmployees(){
         List<Employee> employees = new ArrayList<>();
-        Employee employee1 = new Employee("Klaus",1,23,999999,"male");
-        Employee employee2 = new Employee("Jason",2,24,12312412,"female");
+        Employee employee1 = new Employee("Klaus",1,23,999999,"male",1);
+        Employee employee2 = new Employee("Jason",2,24,12312412,"female",1);
         employees.add(employee1);
         employees.add(employee2);
         return employees;
@@ -48,8 +48,8 @@ public class CompanyControllerTest {
     @Test
     void should_get_all_companies_when_perform_get_given_() throws Exception {
         //given
-        Employee employee1 = new Employee("Klaus",1,23,999999,"male");
-        Employee employee2 = new Employee("Jason",2,24,12312412,"female");
+        Employee employee1 = new Employee("Klaus",1,23,999999,"male",1);
+        Employee employee2 = new Employee("Jason",2,24,12312412,"female",1);
         companyRepository.create(new Company(1,"Apple",null));
         //when
         mockMvc.perform(MockMvcRequestBuilders.get("/companies"))
@@ -63,8 +63,8 @@ public class CompanyControllerTest {
     @Test
     void should_get_company_when_perform_get_given_id() throws Exception {
         //given
-        Employee employee1 = new Employee("Klaus",1,23,999999,"male");
-        Employee employee2 = new Employee("Jason",2,24,12312412,"female");
+        Employee employee1 = new Employee("Klaus",1,23,999999,"male",1);
+        Employee employee2 = new Employee("Jason",2,24,12312412,"female",1);
         companyRepository.create(new Company(1,"Apple", List.of(employee1,employee2)));
         //when
         mockMvc.perform(MockMvcRequestBuilders.get("/companies/1"))

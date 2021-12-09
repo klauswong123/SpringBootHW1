@@ -48,12 +48,10 @@ public class CompanyRepository {
     }
 
     public Company update(Integer id, Company company) {
-        Company targetCompany = companies.stream()
-                .filter(singlecompany -> singlecompany.getId().equals(id))
-                .findFirst().orElseThrow(NullPointerException::new);
+        Company targetCompany = getByID(id);
         if(company.getEmployees()!=null) targetCompany.setEmployees(company.getEmployees());
         if(company.getName()!=null) targetCompany.setName(company.getName());
-        companies.remove(company);
+        companies.remove(getByID(id));
         companies.add(company);
         return targetCompany;
     }

@@ -34,7 +34,7 @@ class EmployeeControllerTest {
 	@Test
 	void should_get_all_employees_when_perform_given_employees() throws Exception {
 		//given
-		Employee employee = new Employee("Klaus",1,20,99999999,"female");
+		Employee employee = new Employee("Klaus",1,20,99999999,"female",1);
 		employeeRepository.create(employee);
 		//when
 		mockMvc.perform(MockMvcRequestBuilders.get("/employees"))
@@ -70,7 +70,7 @@ class EmployeeControllerTest {
 	@Test
 	void should_get_employee_when_perform_get_given_id() throws Exception {
 		//given
-		Employee employee = new Employee("Klaus",1,20,99999999,"female");
+		Employee employee = new Employee("Klaus",1,20,99999999,"female",1);
 		employeeRepository.create(employee);
 		String employeeAsJson = new ObjectMapper().writeValueAsString(employee);
 		//when
@@ -85,11 +85,11 @@ class EmployeeControllerTest {
 	@Test
 	void should_get_employees_when_perform_get_given_page_and_pageSize() throws Exception {
 		//given
-		Employee employee1 = new Employee("Klaus",1,20,99999999,"female");
+		Employee employee1 = new Employee("Klaus",1,20,99999999,"female",1);
 		employeeRepository.create(employee1);
-		Employee employee2 = new Employee("Nick",2,50,1000,"male");
+		Employee employee2 = new Employee("Nick",2,50,1000,"male",1);
 		employeeRepository.create(employee2);
-		Employee employee3 = new Employee("Jack",3,60,1,"male");
+		Employee employee3 = new Employee("Jack",3,60,1,"male",1);
 		employeeRepository.create(employee3);
 		//when
 		//then
@@ -111,11 +111,11 @@ class EmployeeControllerTest {
 	@Test
 	void should_get_employee_when_perform_get_given_gender() throws Exception {
 		//given
-		Employee employee = new Employee("Klaus",1,20,99999999,"female");
+		Employee employee = new Employee("Klaus",1,20,99999999,"female",1);
 		employeeRepository.create(employee);
-		Employee employee2 = new Employee("Nick",2,50,1000,"male");
+		Employee employee2 = new Employee("Nick",2,50,1000,"male",1);
 		employeeRepository.create(employee2);
-		Employee employee3 = new Employee("Jack",3,60,1,"male");
+		Employee employee3 = new Employee("Jack",3,60,1,"male",1);
 		employeeRepository.create(employee3);
 		//when
 		ObjectMapper mapper = new ObjectMapper();
@@ -138,7 +138,7 @@ class EmployeeControllerTest {
 	@Test
 	void should_return_employee_when_perform_put_given_updated_employee() throws Exception {
 		//given
-		Employee employee = new Employee("Klaus",1,20,99999999,"female");
+		Employee employee = new Employee("Klaus",1,20,99999999,"female",1);
 		employeeRepository.create(employee);
 		String updatedEmployee="{\n" +
 				"    \"age\": 23,\n" +
@@ -160,11 +160,11 @@ class EmployeeControllerTest {
 	@Test
 	void should_delete_one_employee_when_perform_delete_given_id() throws Exception {
 		//given
-		Employee employee = new Employee("Klaus",1,20,99999999,"female");
+		Employee employee = new Employee("Klaus",1,20,99999999,"female",1);
 		employeeRepository.create(employee);
-		Employee employee2 = new Employee("Nick",2,50,1000,"male");
+		Employee employee2 = new Employee("Nick",2,50,1000,"male",1);
 		employeeRepository.create(employee2);
-		Employee employee3 = new Employee("Jack",3,60,1,"male");
+		Employee employee3 = new Employee("Jack",3,60,1,"male",1);
 		employeeRepository.create(employee3);
 		//when
 		mockMvc.perform(MockMvcRequestBuilders.delete("/employees/3"))

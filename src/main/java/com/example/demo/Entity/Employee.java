@@ -11,17 +11,14 @@ public class Employee {
     private String gender;
 
     private Integer companyID;
-    public Employee(String name, Integer id, Integer age, Integer salary, String gender, Integer... companyID) {
+    public Employee(String name, Integer id, Integer age, Integer salary, String gender, Integer companyID) {
         this.name = name;
         this.id = id;
         this.age = age;
         this.salary = salary;
         this.gender = gender;
-        if(companyID.length!=0){
-            this.companyID=companyID[0];
-        }
-        else{
-            this.companyID=1;
+        if(companyID!=null){
+            this.companyID=companyID;
         }
     }
 
