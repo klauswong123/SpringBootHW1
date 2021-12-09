@@ -104,19 +104,6 @@ class EmployeeControllerTest {
 				.andExpect(MockMvcResultMatchers.jsonPath("$.salary").value(123456));
 	}
 
-	@Test
-	void should_get_employee_when_perform_get_given_id() throws Exception {
-		//given
-		Employee employee = new Employee("Klaus","1",20,99999999,"female","1");
-		employeeRepository.insert(employee);
-		String employeeAsJson = new ObjectMapper().writeValueAsString(employee);
-		//when
-		String returnBody = mockMvc.perform(get("/employees/1"))
-				.andExpect(MockMvcResultMatchers.status().isOk())
-				.andExpect(MockMvcResultMatchers.jsonPath("$.id").isString())
-				.andReturn().getResponse().getContentAsString();
-		//then
-	}
 
 	@Test
 	void should_get_employees_when_perform_get_given_page_and_pageSize() throws Exception {
@@ -186,18 +173,13 @@ class EmployeeControllerTest {
 	@Test
 	void should_delete_one_employee_when_perform_delete_given_id() throws Exception {
 		//given
-		Employee employee = new Employee("Klaus","1",20,99999999,"female","1");
-		employeeRepository.insert(employee);
-		Employee employee2 = new Employee("Nick","2",50,1000,"male","1");
-		employeeRepository.insert(employee2);
-		Employee employee3 = new Employee("Jack","3",60,1,"male","1");
-		employeeRepository.insert(employee3);
+		Employee employee = getSingleEmployee();
+		Employee employee1 = employeeRepository.insert(employee);
 		//when
-		mockMvc.perform(MockMvcRequestBuilders.delete("/employees/3"))
+		mockMvc.perform(MockMvcRequestBuilders.delete("/employees/{id}",employee1.getId()))
 				.andExpect(MockMvcResultMatchers.status().isNoContent());
-
 		//then
-		assertEquals(2, employeeRepository.findAll().size());
+		assertEquals(0, employeeRepository.findAll().size());
 	}
 
 }
