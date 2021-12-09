@@ -3,6 +3,7 @@ package com.example.demo.service;
 import com.example.demo.entity.Company;
 import com.example.demo.entity.Employee;
 import com.example.demo.mapper.CompanyMapper;
+import com.example.demo.repository.CompanyRepository;
 import com.example.demo.service.CompanyService;
 import com.example.demo.service.EmployeeService;
 import org.junit.jupiter.api.Test;
@@ -21,30 +22,30 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(SpringExtension.class)
 public class CompanyServiceTest {
     @Mock
-    CompanyMapper companyMapper;
-
+    CompanyRepository companyRepository;
     @Mock
     EmployeeService employeeService;
-
     @InjectMocks
     CompanyService companyService;
 
-    private List<Employee> getEmployees() {
-        List<Employee> employees = new ArrayList<>();
-        employees.add(new Employee("Klauswong","1",  22,  100000, "Female","1"));
-        employees.add(new Employee("Klaus1","2",  22,  100000, "Female","1"));
-        return employees;
+    private Employee getEmployee(String companyId){
+        return new Employee("Klaus",20,99999999,"female",companyId);
     }
+
+    private Employee getEmployee1(String companyId){
+        return  new Employee("Chris",23,999999,"male",companyId);
+    }
+
 
     @Test
     void should_return_all_companies_when_find_all_given_companies() {
         //given
         List<Company> companies = new ArrayList<>();
         companies.add(new Company("Spring"));
-
+        given(companyRepository.findAll())
+                .willReturn(companies);
         //when
         List<Company> actual = companyService.findAll();
-
         //then
         assertEquals(companies.size(), actual.size());
     }
@@ -52,11 +53,12 @@ public class CompanyServiceTest {
     void should_return_a_company_when_get_company_given_company_id() {
         //given
         List<Company> companies = new ArrayList<>();
-
         Company company1 = new Company("Spring");
         Company company2 = new Company("Spring2");
         companies.add(company1);
         companies.add(company2);
+        given(companyRepository.findById(company1.getId()))
+                .willReturn(java.util.Optional.of(company1));
         //when
         Company actual = companyService.getByID(company1.getId());
         //then
