@@ -1,25 +1,28 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.Company;
+import com.example.demo.entity.Employee;
 import com.example.demo.exception.NoCompanyFoundException;
 import com.example.demo.mapper.CompanyMapper;
 import com.example.demo.mapper.EmployeeMapper;
 import com.example.demo.repository.CompanyRepository;
+import com.example.demo.repository.EmployeeRepository;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class CompanyService {
     private CompanyRepository companyRepository;
     private CompanyMapper companyMapper;
     private EmployeeMapper employeeMapper;
+    private EmployeeRepository employeeRepository;
 
-    public CompanyService(CompanyRepository companyRepository, CompanyMapper companyMapper, EmployeeMapper employeeMapper){
+    public CompanyService(CompanyRepository companyRepository, CompanyMapper companyMapper, EmployeeMapper employeeMapper, EmployeeRepository employeeRepository){
         this.companyRepository = companyRepository;
         this.companyMapper = companyMapper;
         this.employeeMapper = employeeMapper;
+        this.employeeRepository = employeeRepository;
     }
 
     public List<Company> findAll() {
@@ -48,5 +51,10 @@ public class CompanyService {
 
     public void delete(String id) {
         companyRepository.deleteById(id);
+    }
+
+
+    public List<Employee> getEmployeesByCompanyID(String companyID){
+        return employeeRepository.findByCompanyID(companyID);
     }
 }

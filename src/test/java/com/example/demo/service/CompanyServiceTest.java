@@ -6,6 +6,7 @@ import com.example.demo.exception.NoCompanyFoundException;
 import com.example.demo.exception.NoEmployeeFoundException;
 import com.example.demo.mapper.CompanyMapper;
 import com.example.demo.repository.CompanyRepository;
+import com.example.demo.repository.EmployeeRepository;
 import com.example.demo.service.CompanyService;
 import com.example.demo.service.EmployeeService;
 import org.junit.jupiter.api.Test;
@@ -30,7 +31,7 @@ public class CompanyServiceTest {
     @Mock
     CompanyRepository companyRepository;
     @Mock
-    EmployeeService employeeService;
+    EmployeeRepository employeeRepository;
     @InjectMocks
     CompanyService companyService;
 
@@ -69,6 +70,23 @@ public class CompanyServiceTest {
         Company actual = companyService.getByID(company1.getId());
         //then
         assertEquals(company1, actual);
+    }
+
+    @Test
+    void should_return_employees_when_get_company_employee_given_company_id() {
+        //given
+        List<Company> companies = new ArrayList<>();
+        Company company1 = new Company("Spring");
+        companies.add(company1);
+        List<Employee> employees = new ArrayList<>();
+        Employee employee = getEmployee(company1.getId());
+        employees.add(employee);
+        given(employeeRepository.findByCompanyID(company1.getId()))
+                .willReturn(employees);
+        //when
+        List<Employee> actual = companyService.getEmployeesByCompanyID(company1.getId());
+        //then
+        assertEquals(employees, actual);
     }
 
     @Test
@@ -124,6 +142,7 @@ public class CompanyServiceTest {
         //given
         Company company = new Company("Spring");
         willDoNothing().given(companyRepository).deleteById(company.getId());
+
         //when
         companyService.delete(company.getId());
         //then

@@ -36,12 +36,12 @@ public class CompanyController {
 
     @GetMapping("/{id}")
     public CompanyResponse getCompanyByID(@PathVariable("id") String id) {
-        return companyMapper.toResponse(companyService.getByID(id),employeeService.getEmployeesByCompanyID(id));
+        return companyMapper.toResponse(companyService.getByID(id),companyService.getEmployeesByCompanyID(id));
     }
 
     @GetMapping("/{id}/employees")
     public List<EmployeeResponse> getEmployeesByID(@PathVariable("id") String id){
-        return employeeService.getEmployeesByCompanyID(id).stream()
+        return companyService.getEmployeesByCompanyID(id).stream()
                 .map(employee -> employeeMapper.toResponse(employee))
                 .collect(Collectors.toList());
     }

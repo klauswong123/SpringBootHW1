@@ -50,9 +50,4 @@ public class EmployeeService {
         employeeRepository.deleteById(id);
     }
 
-    public List<Employee> getEmployeesByCompanyID(String companyID){
-        return employeeRepository.findByCompanyID(companyID);
-    }
-
-
 }
